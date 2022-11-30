@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaiaReferral", "GaiaReferral.csproj", "{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F97D893-733B-44C0-B4AE-F1BF8B063FE7}
+	EndGlobalSection
+EndGlobal
