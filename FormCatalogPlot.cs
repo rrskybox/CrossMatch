@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
+using System.Deployment.Application;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheSky64Lib;
-using System.IO;
-using System.Deployment.Application;
 
 
 namespace GaiaReferral
@@ -155,7 +150,7 @@ namespace GaiaReferral
                 if (Path.GetExtension(listPath).Contains("csv"))
                     outLines[0] += ",GAIA Reference, GAIA RA, GAIA Dec";
                 else
-                    outLines[0] += "    GAIA Reference                   GAIA RA            GAIA Dec";
+                    outLines[0] += "     GAIA Reference                  GAIA RA               GAIA Dec              Magnitude";
                 refCount = 0;
                 for (int i = 1; i < lines.Length; i++)
                 {
@@ -173,11 +168,14 @@ namespace GaiaReferral
                             DialogResult mdMag = MessageBox.Show("Do you want to ignore magnitudes?", "Manual Option for " + lr.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             if (mdMag == DialogResult.Yes)
                                 magDiff = 8;
-                            DialogResult mdClick = MessageBox.Show("Click on new target then hit OK", "Manual Option for " + lr.Name, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            DialogResult mdClick = MessageBox.Show("Click on new target then hit OK", "Manual Option for " + lr.Name, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             //Find current clickfind location
-                            (double ra, double dec) = StarFinder.LookupClickFind();
-                            lr.RA = ra;
-                            lr.Dec = dec;
+                            if (mdClick == DialogResult.OK)
+                            {
+                                (double ra, double dec) = StarFinder.LookupClickFind();
+                                lr.RA = ra;
+                                lr.Dec = dec;
+                            }
                         }
                         else
                             break;
@@ -226,18 +224,17 @@ namespace GaiaReferral
                 StarFinder.starData? sdg = StarFinder.FindNearestByCatalog(sdNorm, "Gaia", lr.Magnitude, magDiff);
                 if (sdg != null)
                 {
-                    lr.CrossGaiaName = ((StarFinder.starData)sdg).TargetName + " " + ((StarFinder.starData)sdg).CatalogId;
+                    lr.CrossGaiaName = ((StarFinder.starData)sdg).TargetName + " " + ((StarFinder.starData)sdg).CatalogId.PadRight(19);
                     if (Path.GetExtension(listPath).Contains("csv"))
-                        outLines[lineIdx] += "," + lr.CrossGaiaName+","+((StarFinder.starData)sdg).RA + "," + ((StarFinder.starData)sdg).Dec;
+                        outLines[lineIdx] += "," + lr.CrossGaiaName + "," + ((StarFinder.starData)sdg).RA + "," + ((StarFinder.starData)sdg).Dec + "," + ((StarFinder.starData)sdg).Magnitude;
                     else
-                        outLines[lineIdx] += "    " + lr.CrossGaiaName +"    "+ ((StarFinder.starData)sdg).RA + "    " + ((StarFinder.starData)sdg).Dec;
+                        outLines[lineIdx] += "    " + lr.CrossGaiaName + "    " + ((StarFinder.starData)sdg).RA.ToString().PadRight(18) + "    " + ((StarFinder.starData)sdg).Dec.ToString().PadRight(18) + "    " + ((StarFinder.starData)sdg).Magnitude.ToString().PadRight(8);
                     refCount++;
                     return true;
                 }
             }
             return false;
         }
-
 
         private void StepButton_Click(object sender, EventArgs e)
         {

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GaiaReferral
 {
@@ -63,7 +59,6 @@ namespace GaiaReferral
 
         public static Referral BuildReference(string starLine)
         {
-
             //Note index 0 is header row
             Referral refer = new Referral();
             refer.Name = starLine.Substring(StartName, LengthName).TrimEnd();
@@ -86,7 +81,7 @@ namespace GaiaReferral
             refer.RA = Convert.ToDouble(csvEntries[RASplit]);
             refer.Dec = Convert.ToDouble(csvEntries[DecSplit]);
             try { refer.Magnitude = Convert.ToDouble(csvEntries[MagSplit]); }
-            catch { refer.Magnitude = null; }            
+            catch { refer.Magnitude = null; }
             refer.RA = refer.RA * 24 / 360;  //Convert RA to hours
             return refer;
         }
