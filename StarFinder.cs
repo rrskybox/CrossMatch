@@ -5,7 +5,7 @@ using TheSky64Lib;
 
 namespace GaiaReferral
 {
-    class StarFinder
+    public class StarFinder
     {
         public static void SetStarChart(double ra, double dec)
         {
@@ -40,7 +40,7 @@ namespace GaiaReferral
             return (ra, dec);
         }
 
-        public static List<starData> FindNearbyStars(double ra, double dec)
+        public static List<ReferenceData> FindNearbyStars(double ra, double dec)
         {
             //Set TSX objects -- starchart and object information
             sky6StarChart tsxsc = new sky6StarChart();
@@ -51,13 +51,13 @@ namespace GaiaReferral
             double scY = tsxsc.dOut1;
             tsxsc.ClickFind((int)scX, (int)scY);
             //Read in each star object and save name, ra and dec, magnitude and id's
-            List<starData> sdList = new List<starData>();
+            List<ReferenceData> sdList = new List<ReferenceData>();
             for (int rIdx = 0; rIdx < tsxoi.Count; rIdx++)
             {
-                starData sd = new starData();
+                ReferenceData sd = new ReferenceData();
                 tsxoi.Index = rIdx;
                 tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_NAME1);
-                sd.TargetName = tsxoi.ObjInfoPropOut;
+                sd.ReferenceName = tsxoi.ObjInfoPropOut;
                 tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_RA_2000);
                 sd.RA = tsxoi.ObjInfoPropOut;
                 tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DEC_2000);
@@ -71,24 +71,25 @@ namespace GaiaReferral
                     tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DB_FIELD_7);
                     sd.CatalogId = tsxoi.ObjInfoPropOut.ToString();
                 }
-                if (!sd.TargetName.Contains("Mouse"))
+                if (!sd.ReferenceName.Contains("Mouse"))
                     sdList.Add(sd);
             }
             return sdList;
         }
 
-        public static starData? FindNearestByCatalog(List<starData> sdList, string catalog, double? magnitude, double magDiff)
+        public static ReferenceData? FindNearestByCatalog(List<ReferenceData> sdList, string catalog, double? magnitude, double magDiff)
         {
-           //Get all stars from Gaia catalog whose magnitude is near the desired magnitude
-           List<StarFinder.starData>? closeMagList = sdList.FindAll(x => x.TargetName.Contains(catalog) && IsMagnitudeClose(x.Magnitude,magnitude, magDiff));
+            //Get all stars from Gaia catalog whose magnitude is near the desired magnitude
+            List<StarFinder.ReferenceData> closeMagList = sdList.FindAll(x => x.ReferenceName.Contains(catalog) && IsMagnitudeClose(x.Magnitude, magnitude, magDiff));
             //Find the closest of the set
-            starData? sd = null;
+            ReferenceData sd = new ReferenceData();
             if (closeMagList.Count > 0)
             {
                 double minSep = closeMagList.Min(x => x.Separation);
                 sd = closeMagList.First(x => x.Separation == minSep);
+                return sd;
             }
-            return sd;
+            return null;
         }
 
         public static bool IsMagnitudeClose(double? mag1, double? mag2, double magDiff)
@@ -101,32 +102,34 @@ namespace GaiaReferral
                 return false;
         }
 
-        public static List<starData> ComputeAllSeparations(List<starData> sdList, double ra2, double dec2)
+        public static List<ReferenceData> ComputeAllSeparations(List<ReferenceData> sdList, double ra2, double dec2)
         {
             sky6Utils tsxu = new sky6Utils();
-            List<starData> sdOutList = new List<starData>();
-            foreach (starData sd in sdList)
+            List<ReferenceData> sdOutList = new List<ReferenceData>();
+            foreach (ReferenceData sd in sdList)
             {
-                starData sdOut = new starData();
+                ReferenceData sdOut = new ReferenceData();
                 sdOut = sd;
                 tsxu.ComputeAngularSeparation(sdOut.RA, sdOut.Dec, ra2, dec2);
-                sdOut.Separation = tsxu.dOut0 *3600;
+                sdOut.Separation = tsxu.dOut0 * 3600;
                 sdOutList.Add(sdOut);
             }
             return sdOutList;
         }
 
-        public struct starData
+        public class ReferenceData
         {
-            public string TargetName;
+            public string ReferenceName;
             public string CatalogId;
-            public double RA;
-            public double Dec;
-            public double? Magnitude;
+            public double RA = 0;
+            public double Dec = 0;
+            public double? Magnitude = 0;
             public string FieldId;
             public double NormalRA;  //in arcsec
             public double NormalDec;  //in arcsec
             public double Separation;  //in arcsec
+            public double MinFOV = 0.01;
+            public double MaxFOV = 360;
         }
 
     }

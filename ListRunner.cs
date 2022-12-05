@@ -1,16 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+
 
 namespace GaiaReferral
 {
-    class ListRunner
+    public class ListRunner
     {
-        //
-        const int NameSplit = 0;
-        const int RASplit = 7;
-        const int DecSplit = 8;
-        const int MagSplit = 6;
+        char[] csvSplit = new char[] { ',' };
 
+        //Split indices for "standard" csv file
+        const int NameSplit = 0;
+        const int RASplit = 1;
+        const int DecSplit = 2;
+        const int MagSplit = 3;
+
+        //Split indices for raw IAU csv file -- not in use
+        //const int NameSplit = 0;
+        //const int RASplit = 7;
+        //const int DecSplit = 8;
+        //const int MagSplit = 6;
+
+        //Column indices for raw IAU text file -- not in use
         const int StartName = 0;
         const int LengthName = 14;
         const int StartRA = 76;
@@ -20,80 +33,83 @@ namespace GaiaReferral
         const int StartMag = 66;
         const int LengthMag = 5;
 
-        public static List<Referral> BuildReferenceList(string[] lines)
+        public List<TargetData> TargetList = new List<TargetData>();
+
+        public ListRunner(string csvPath)
+        {
+            //Read target data into a target list from a csv file
+            //get filename and open textfile for reading
+            string[] starLines = File.ReadAllLines(csvPath);
+            //BuildColumnList(starLines[0]);
+            TargetList = BuildTargetList(starLines);
+            return;
+        }
+
+        private void BuildColumnList(string topLine)
+        {
+            //Read in the column headers from the input csv file to start column set up
+            List<string> columnHeaders = topLine.Split(csvSplit, System.StringSplitOptions.None).Select(x => x.Trim('\"')).ToList();
+            for (int i = 0; i < columnHeaders.Count; i++)
+            {
+                columnHeaders[i] = columnHeaders[i].Replace(" ", "");
+                columnHeaders[i] = columnHeaders[i].Replace("#", "Num");
+                columnHeaders[i] = columnHeaders[i].Replace("(", "");
+                columnHeaders[i] = columnHeaders[i].Replace(")", "");
+            }
+        }
+
+        private List<TargetData> BuildTargetList(string[] starLines)
         {
             //Note index 0 is header row
-            List<Referral> lr = new List<Referral>();
-            for (int i = 1; i < lines.Length; i++)
+            List<TargetData> lr = new List<TargetData>();
+            for (int i = 1; i < starLines.Length; i++)
             {
-                Referral refer = new Referral();
-                refer.Name = lines[i].Substring(0, 14).TrimEnd();
-                refer.RA = Convert.ToDouble(lines[i].Substring(76, 10).TrimStart());
-                refer.Dec = Convert.ToDouble(lines[i].Substring(96, 8).TrimStart());
-                refer.Magnitude = Convert.ToDouble(lines[i].Substring(65, 6).TrimStart());
-                //Convert RA to hours
-                refer.RA = refer.RA * 24 / 360;
-                lr.Add(refer);
+                if (starLines[i].Contains(","))
+                {
+                    TargetData target = new TargetData();
+                    string[] csvEntries = starLines[i].Split(csvSplit, StringSplitOptions.None);
+                    target.TargetName = csvEntries[NameSplit].ToString();
+                    target.TargetRA = Convert.ToDouble(csvEntries[RASplit]);
+                    target.TargetDec = Convert.ToDouble(csvEntries[DecSplit]);
+                    try { target.TargetMag = Convert.ToDouble(csvEntries[MagSplit]); }
+                    catch { target.TargetMag = null; }
+                    //Convert RA decimal degrees to hours
+                    target.TargetRA = target.TargetRA * 24 / 360;
+                    target.HasReference = false;
+                    lr.Add(target);
+                }
             }
             return lr;
         }
 
-        public static List<Referral> BuildReferenceListCSV(string[] lines)
-        {
-            //Note index 0 is header row
-            List<Referral> lr = new List<Referral>();
-            for (int i = 1; i < lines.Length; i++)
-            {
-                Referral refer = new Referral();
-                string[] csvEntries = lines[i].Split(new char[',']);
-                refer.Name = csvEntries[NameSplit].ToString();
-                refer.RA = Convert.ToDouble(csvEntries[RASplit]);
-                refer.Dec = Convert.ToDouble(csvEntries[DecSplit]);
-                try { refer.Magnitude = Convert.ToDouble(csvEntries[MagSplit]); }
-                catch { refer.Magnitude = null; }
-                refer.RA = refer.RA * 24 / 360;
-                lr.Add(refer);
-            }
-            return lr;
-        }
-
-        public static Referral BuildReference(string starLine)
-        {
-            //Note index 0 is header row
-            Referral refer = new Referral();
-            refer.Name = starLine.Substring(StartName, LengthName).TrimEnd();
-            refer.RA = Convert.ToDouble(starLine.Substring(StartRA, LengthRA).TrimStart());
-            refer.Dec = Convert.ToDouble(starLine.Substring(StartDec, LengthDec).TrimStart());
-            try { refer.Magnitude = Convert.ToDouble(starLine.Substring(StartMag, LengthMag).TrimStart()); }
-            catch { refer.Magnitude = null; }
-            //Convert RA to hours
-            refer.RA = refer.RA * 24 / 360;
-            return refer;
-        }
-
-        public static Referral BuildReferenceCSV(string starLine)
+        private TargetData BuildTarget(string starLine)
         {
             char splitChar = ',';
 
-            Referral refer = new Referral();
+            TargetData target = new TargetData();
             string[] csvEntries = starLine.Split(splitChar);
-            refer.Name = csvEntries[NameSplit].ToString();
-            refer.RA = Convert.ToDouble(csvEntries[RASplit]);
-            refer.Dec = Convert.ToDouble(csvEntries[DecSplit]);
-            try { refer.Magnitude = Convert.ToDouble(csvEntries[MagSplit]); }
-            catch { refer.Magnitude = null; }
-            refer.RA = refer.RA * 24 / 360;  //Convert RA to hours
-            return refer;
+            target.TargetName = csvEntries[NameSplit].ToString().TrimEnd(' ');
+            target.TargetRA = Convert.ToDouble(csvEntries[RASplit]);
+            target.TargetDec = Convert.ToDouble(csvEntries[DecSplit]);
+            try { target.TargetMag = Convert.ToDouble(csvEntries[MagSplit]); }
+            catch { target.TargetMag = null; }
+            //Convert RA decimal degrees to hours
+            target.TargetRA = target.TargetRA * 24 / 360;  //Convert RA to hours
+            target.HasReference = false;
+            return target;
         }
 
-        public struct Referral
+        public class TargetData
         {
-            public string Name;
-            public double RA;
-            public double Dec;
-            public double? Magnitude;
-            public string CrossGaiaName;
-
+            public string TargetName { get; set; }
+            public double TargetRA { get; set; }
+            public double TargetDec { get; set; }
+            public double? TargetMag { get; set; }
+            public bool HasReference { get; set; }
+            public string CrossRefName { get; set; } = "None";
+            public StarFinder.ReferenceData ReferenceStar = new StarFinder.ReferenceData();
+            
         }
+
     }
 }

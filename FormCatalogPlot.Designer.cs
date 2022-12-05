@@ -29,8 +29,8 @@ namespace GaiaReferral
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.MapButton = new System.Windows.Forms.Button();
             this.StarChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.StarListTreeView = new System.Windows.Forms.TreeView();
@@ -38,12 +38,14 @@ namespace GaiaReferral
             this.StarListFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.NextButton = new System.Windows.Forms.Button();
             this.StepCheckBox = new System.Windows.Forms.CheckBox();
+            this.RefTextBox = new System.Windows.Forms.TextBox();
+            this.SkipCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
             // MapButton
             // 
-            this.MapButton.Location = new System.Drawing.Point(12, 21);
+            this.MapButton.Location = new System.Drawing.Point(12, 12);
             this.MapButton.Name = "MapButton";
             this.MapButton.Size = new System.Drawing.Size(45, 36);
             this.MapButton.TabIndex = 1;
@@ -53,39 +55,39 @@ namespace GaiaReferral
             // 
             // StarChart
             // 
-            chartArea2.AxisX.IsStartedFromZero = false;
-            chartArea2.AxisX.Title = "RA (arc sec)";
-            chartArea2.AxisY.IsStartedFromZero = false;
-            chartArea2.AxisY.Title = "Dec (arc sec)";
-            chartArea2.Name = "ChartArea1";
-            this.StarChart.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.IsStartedFromZero = false;
+            chartArea1.AxisX.Title = "RA (arc sec)";
+            chartArea1.AxisY.IsStartedFromZero = false;
+            chartArea1.AxisY.Title = "Dec (arc sec)";
+            chartArea1.Name = "ChartArea1";
+            this.StarChart.ChartAreas.Add(chartArea1);
             this.StarChart.Location = new System.Drawing.Point(249, 21);
             this.StarChart.Name = "StarChart";
-            series2.BackSecondaryColor = System.Drawing.Color.White;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
-            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            series2.MarkerBorderColor = System.Drawing.Color.Black;
-            series2.MarkerColor = System.Drawing.Color.DeepSkyBlue;
-            series2.MarkerImageTransparentColor = System.Drawing.Color.Transparent;
-            series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star4;
-            series2.Name = "Series1";
-            series2.YValuesPerPoint = 2;
-            this.StarChart.Series.Add(series2);
+            series1.BackSecondaryColor = System.Drawing.Color.White;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
+            series1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            series1.MarkerBorderColor = System.Drawing.Color.Black;
+            series1.MarkerColor = System.Drawing.Color.DeepSkyBlue;
+            series1.MarkerImageTransparentColor = System.Drawing.Color.Transparent;
+            series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star4;
+            series1.Name = "Series1";
+            series1.YValuesPerPoint = 2;
+            this.StarChart.Series.Add(series1);
             this.StarChart.Size = new System.Drawing.Size(417, 416);
             this.StarChart.TabIndex = 2;
             this.StarChart.Text = "chart1";
             // 
             // StarListTreeView
             // 
-            this.StarListTreeView.Location = new System.Drawing.Point(11, 71);
+            this.StarListTreeView.Location = new System.Drawing.Point(11, 75);
             this.StarListTreeView.Name = "StarListTreeView";
-            this.StarListTreeView.Size = new System.Drawing.Size(224, 365);
+            this.StarListTreeView.Size = new System.Drawing.Size(224, 361);
             this.StarListTreeView.TabIndex = 3;
             // 
             // ListButton
             // 
-            this.ListButton.Location = new System.Drawing.Point(63, 21);
+            this.ListButton.Location = new System.Drawing.Point(63, 12);
             this.ListButton.Name = "ListButton";
             this.ListButton.Size = new System.Drawing.Size(43, 36);
             this.ListButton.TabIndex = 4;
@@ -96,7 +98,7 @@ namespace GaiaReferral
             // NextButton
             // 
             this.NextButton.BackColor = System.Drawing.Color.Gray;
-            this.NextButton.Location = new System.Drawing.Point(192, 21);
+            this.NextButton.Location = new System.Drawing.Point(192, 12);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(43, 36);
             this.NextButton.TabIndex = 5;
@@ -108,12 +110,31 @@ namespace GaiaReferral
             // 
             this.StepCheckBox.AutoSize = true;
             this.StepCheckBox.ForeColor = System.Drawing.Color.White;
-            this.StepCheckBox.Location = new System.Drawing.Point(138, 32);
+            this.StepCheckBox.Location = new System.Drawing.Point(187, 54);
             this.StepCheckBox.Name = "StepCheckBox";
             this.StepCheckBox.Size = new System.Drawing.Size(48, 17);
             this.StepCheckBox.TabIndex = 6;
             this.StepCheckBox.Text = "Step";
             this.StepCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // RefTextBox
+            // 
+            this.RefTextBox.Location = new System.Drawing.Point(115, 12);
+            this.RefTextBox.Name = "RefTextBox";
+            this.RefTextBox.Size = new System.Drawing.Size(71, 20);
+            this.RefTextBox.TabIndex = 7;
+            this.RefTextBox.Text = "Gaia";
+            // 
+            // SkipCheckBox
+            // 
+            this.SkipCheckBox.AutoSize = true;
+            this.SkipCheckBox.ForeColor = System.Drawing.Color.White;
+            this.SkipCheckBox.Location = new System.Drawing.Point(115, 38);
+            this.SkipCheckBox.Name = "SkipCheckBox";
+            this.SkipCheckBox.Size = new System.Drawing.Size(47, 17);
+            this.SkipCheckBox.TabIndex = 8;
+            this.SkipCheckBox.Text = "Skip";
+            this.SkipCheckBox.UseVisualStyleBackColor = true;
             // 
             // FormCatalogPlot
             // 
@@ -121,6 +142,8 @@ namespace GaiaReferral
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(688, 450);
+            this.Controls.Add(this.SkipCheckBox);
+            this.Controls.Add(this.RefTextBox);
             this.Controls.Add(this.StepCheckBox);
             this.Controls.Add(this.NextButton);
             this.Controls.Add(this.ListButton);
@@ -145,6 +168,8 @@ namespace GaiaReferral
         private System.Windows.Forms.OpenFileDialog StarListFileDialog;
         private System.Windows.Forms.Button NextButton;
         private System.Windows.Forms.CheckBox StepCheckBox;
+        private System.Windows.Forms.TextBox RefTextBox;
+        private System.Windows.Forms.CheckBox SkipCheckBox;
     }
 }
 
