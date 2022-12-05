@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 namespace GaiaReferral
@@ -38,9 +41,10 @@ namespace GaiaReferral
         public ListRunner(string csvPath)
         {
             //Read target data into a target list from a csv file
+            // Create a UTF-8 encoding.
+            Encoding decode = Encoding.GetEncoding(65001);
             //get filename and open textfile for reading
-            string[] starLines = File.ReadAllLines(csvPath);
-            //BuildColumnList(starLines[0]);
+            string[] starLines = File.ReadAllLines(csvPath, decode);
             TargetList = BuildTargetList(starLines);
             return;
         }
@@ -68,7 +72,7 @@ namespace GaiaReferral
                 {
                     TargetData target = new TargetData();
                     string[] csvEntries = starLines[i].Split(csvSplit, StringSplitOptions.None);
-                    target.TargetName = csvEntries[NameSplit].ToString();
+                    target.TargetName = ToASCII(csvEntries[NameSplit].ToString());
                     target.TargetRA = Convert.ToDouble(csvEntries[RASplit]);
                     target.TargetDec = Convert.ToDouble(csvEntries[DecSplit]);
                     try { target.TargetMag = Convert.ToDouble(csvEntries[MagSplit]); }
@@ -82,13 +86,49 @@ namespace GaiaReferral
             return lr;
         }
 
-        private TargetData BuildTarget(string starLine)
+        private string ToASCII(string s)
+        {
+            String norm = s.Normalize(NormalizationForm.FormKC);
+            String q = String.Join("",
+                s.Normalize(NormalizationForm.FormD)
+               .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+            return q;
+        }
+
+        public string ToASCII2(string stIn)
+        {
+            string stFormD = stIn.Normalize(NormalizationForm.FormD);
+            StringBuilder sb = new StringBuilder();
+            for (int ich = 0; ich < stFormD.Length; ich++)
+            {
+                UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(stFormD[ich]);
+                if (uc != UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(stFormD[ich]);
+                }
+            }
+            return (sb.ToString().Normalize(NormalizationForm.FormC));
+        }
+
+        public string ToASCII3(string str)
+        {
+            if (str == null) return null;
+            var chars =
+                from c in str.Normalize(NormalizationForm.FormD).ToCharArray()
+                let uc = CharUnicodeInfo.GetUnicodeCategory(c)
+                where uc != UnicodeCategory.NonSpacingMark
+                select c;
+            var cleanStr = new string(chars.ToArray()).Normalize(NormalizationForm.FormC);
+            return cleanStr;
+        }
+
+         private TargetData BuildTarget(string starLine)
         {
             char splitChar = ',';
 
             TargetData target = new TargetData();
             string[] csvEntries = starLine.Split(splitChar);
-            target.TargetName = csvEntries[NameSplit].ToString().TrimEnd(' ');
+            target.TargetName = ToASCII(csvEntries[NameSplit].ToString().TrimEnd(' '));
             target.TargetRA = Convert.ToDouble(csvEntries[RASplit]);
             target.TargetDec = Convert.ToDouble(csvEntries[DecSplit]);
             try { target.TargetMag = Convert.ToDouble(csvEntries[MagSplit]); }
@@ -108,7 +148,7 @@ namespace GaiaReferral
             public bool HasReference { get; set; }
             public string CrossRefName { get; set; } = "None";
             public StarFinder.ReferenceData ReferenceStar = new StarFinder.ReferenceData();
-            
+
         }
 
     }

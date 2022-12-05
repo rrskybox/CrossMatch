@@ -19,6 +19,8 @@ namespace GaiaReferral
         public double magDiff;
         public string listPath;
 
+        private bool abortFlag = false;
+
         public XDocument DBxml;
 
         const double StandardMagnitudeRange = 2;
@@ -31,6 +33,9 @@ namespace GaiaReferral
             ButtonGreen(MapButton);
             ButtonGreen(ListButton);
             ButtonDisable(NextButton);
+            ButtonDisable(AbortButton);
+            ButtonGreen(CloseButton);
+
             try
             { this.Text = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(); }
             catch
@@ -168,9 +173,14 @@ namespace GaiaReferral
                         System.Threading.Thread.Sleep(1000);
                         Show();
                         System.Windows.Forms.Application.DoEvents();
+                        if (abortFlag)
+                            return;
                     }
                     ButtonDisable(NextButton);
                     ButtonRed(ListButton);
+                    System.Windows.Forms.Application.DoEvents();
+                    if (abortFlag)
+                        return;
                 }
                 //write out new file -- Rev 15 restricted to csv file input and and sdb text output
                 if (Path.GetExtension(listPath).Contains("csv"))
@@ -182,7 +192,7 @@ namespace GaiaReferral
                     sdb.SDBToClipboard(tgtInput.TargetList);
                     sdb.SDBToCSVFile(tgtInput.TargetList, listPath);
                 }
-                MessageBox.Show("Collected " + refCount + " " + RefTextBox.Text + "reference stars", "List Completion", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                MessageBox.Show("Collected " + refCount + "/" + tgtInput.TargetList.Count.ToString()+ " " + RefTextBox.Text  + " reference stars", "List Completion", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
         }
@@ -217,7 +227,7 @@ namespace GaiaReferral
             return tgtData;
         }
 
-         #region click events
+        #region click events
         private void FindButton_Click(object sender, EventArgs e)
         {
             ButtonRed(MapButton);
@@ -236,12 +246,17 @@ namespace GaiaReferral
             ButtonDisable(MapButton);
             ButtonRed(ListButton);
             ButtonDisable(NextButton);
+            ButtonEnable(AbortButton);
+            ButtonGreen(AbortButton);
+
+            abortFlag = false;
 
             ListReferences();
 
             ButtonGreen(ListButton);
             ButtonEnable(MapButton);
             ButtonDisable(NextButton);
+            ButtonDisable(AbortButton);
             return;
         }
 
@@ -272,8 +287,24 @@ namespace GaiaReferral
             bt.BackColor = Color.LightGreen;
         }
 
+        private void OnTopCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (OnTopCheckBox.Checked)
+                this.TopMost = true;
+            else
+                this.TopMost = false;
+        }
+        private void AbortButton_Click(object sender, EventArgs e)
+        {
+            abortFlag = true;
+        }
         #endregion
 
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            return;
+        }
     }
 
 }

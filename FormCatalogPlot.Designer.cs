@@ -40,14 +40,17 @@ namespace GaiaReferral
             this.StepCheckBox = new System.Windows.Forms.CheckBox();
             this.RefTextBox = new System.Windows.Forms.TextBox();
             this.SkipCheckBox = new System.Windows.Forms.CheckBox();
+            this.OnTopCheckBox = new System.Windows.Forms.CheckBox();
+            this.AbortButton = new System.Windows.Forms.Button();
+            this.CloseButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
             // MapButton
             // 
-            this.MapButton.Location = new System.Drawing.Point(12, 12);
+            this.MapButton.Location = new System.Drawing.Point(12, 10);
             this.MapButton.Name = "MapButton";
-            this.MapButton.Size = new System.Drawing.Size(45, 36);
+            this.MapButton.Size = new System.Drawing.Size(45, 34);
             this.MapButton.TabIndex = 1;
             this.MapButton.Text = "Map";
             this.MapButton.UseVisualStyleBackColor = true;
@@ -61,7 +64,7 @@ namespace GaiaReferral
             chartArea1.AxisY.Title = "Dec (arc sec)";
             chartArea1.Name = "ChartArea1";
             this.StarChart.ChartAreas.Add(chartArea1);
-            this.StarChart.Location = new System.Drawing.Point(249, 21);
+            this.StarChart.Location = new System.Drawing.Point(249, 12);
             this.StarChart.Name = "StarChart";
             series1.BackSecondaryColor = System.Drawing.Color.White;
             series1.ChartArea = "ChartArea1";
@@ -74,7 +77,7 @@ namespace GaiaReferral
             series1.Name = "Series1";
             series1.YValuesPerPoint = 2;
             this.StarChart.Series.Add(series1);
-            this.StarChart.Size = new System.Drawing.Size(417, 416);
+            this.StarChart.Size = new System.Drawing.Size(417, 425);
             this.StarChart.TabIndex = 2;
             this.StarChart.Text = "chart1";
             // 
@@ -82,14 +85,14 @@ namespace GaiaReferral
             // 
             this.StarListTreeView.Location = new System.Drawing.Point(11, 75);
             this.StarListTreeView.Name = "StarListTreeView";
-            this.StarListTreeView.Size = new System.Drawing.Size(224, 361);
+            this.StarListTreeView.Size = new System.Drawing.Size(224, 331);
             this.StarListTreeView.TabIndex = 3;
             // 
             // ListButton
             // 
-            this.ListButton.Location = new System.Drawing.Point(63, 12);
+            this.ListButton.Location = new System.Drawing.Point(63, 10);
             this.ListButton.Name = "ListButton";
-            this.ListButton.Size = new System.Drawing.Size(43, 36);
+            this.ListButton.Size = new System.Drawing.Size(43, 34);
             this.ListButton.TabIndex = 4;
             this.ListButton.Text = "List";
             this.ListButton.UseVisualStyleBackColor = true;
@@ -98,7 +101,7 @@ namespace GaiaReferral
             // NextButton
             // 
             this.NextButton.BackColor = System.Drawing.Color.Gray;
-            this.NextButton.Location = new System.Drawing.Point(192, 12);
+            this.NextButton.Location = new System.Drawing.Point(192, 10);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(43, 36);
             this.NextButton.TabIndex = 5;
@@ -110,7 +113,7 @@ namespace GaiaReferral
             // 
             this.StepCheckBox.AutoSize = true;
             this.StepCheckBox.ForeColor = System.Drawing.Color.White;
-            this.StepCheckBox.Location = new System.Drawing.Point(187, 54);
+            this.StepCheckBox.Location = new System.Drawing.Point(192, 52);
             this.StepCheckBox.Name = "StepCheckBox";
             this.StepCheckBox.Size = new System.Drawing.Size(48, 17);
             this.StepCheckBox.TabIndex = 6;
@@ -136,12 +139,47 @@ namespace GaiaReferral
             this.SkipCheckBox.Text = "Skip";
             this.SkipCheckBox.UseVisualStyleBackColor = true;
             // 
+            // OnTopCheckBox
+            // 
+            this.OnTopCheckBox.AutoSize = true;
+            this.OnTopCheckBox.ForeColor = System.Drawing.Color.White;
+            this.OnTopCheckBox.Location = new System.Drawing.Point(12, 51);
+            this.OnTopCheckBox.Name = "OnTopCheckBox";
+            this.OnTopCheckBox.Size = new System.Drawing.Size(62, 17);
+            this.OnTopCheckBox.TabIndex = 9;
+            this.OnTopCheckBox.Text = "On Top";
+            this.OnTopCheckBox.UseVisualStyleBackColor = true;
+            this.OnTopCheckBox.CheckedChanged += new System.EventHandler(this.OnTopCheckBox_CheckedChanged);
+            // 
+            // AbortButton
+            // 
+            this.AbortButton.Location = new System.Drawing.Point(12, 412);
+            this.AbortButton.Name = "AbortButton";
+            this.AbortButton.Size = new System.Drawing.Size(43, 34);
+            this.AbortButton.TabIndex = 10;
+            this.AbortButton.Text = "Abort";
+            this.AbortButton.UseVisualStyleBackColor = true;
+            this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.Location = new System.Drawing.Point(192, 412);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(43, 34);
+            this.CloseButton.TabIndex = 11;
+            this.CloseButton.Text = "Close";
+            this.CloseButton.UseVisualStyleBackColor = true;
+            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+            // 
             // FormCatalogPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
-            this.ClientSize = new System.Drawing.Size(688, 450);
+            this.ClientSize = new System.Drawing.Size(680, 455);
+            this.Controls.Add(this.CloseButton);
+            this.Controls.Add(this.AbortButton);
+            this.Controls.Add(this.OnTopCheckBox);
             this.Controls.Add(this.SkipCheckBox);
             this.Controls.Add(this.RefTextBox);
             this.Controls.Add(this.StepCheckBox);
@@ -170,6 +208,9 @@ namespace GaiaReferral
         private System.Windows.Forms.CheckBox StepCheckBox;
         private System.Windows.Forms.TextBox RefTextBox;
         private System.Windows.Forms.CheckBox SkipCheckBox;
+        private System.Windows.Forms.CheckBox OnTopCheckBox;
+        private System.Windows.Forms.Button AbortButton;
+        private System.Windows.Forms.Button CloseButton;
     }
 }
 

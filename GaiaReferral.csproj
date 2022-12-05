@@ -27,7 +27,7 @@
     <ProductName>Catalog Plotter</ProductName>
     <PublisherName>TSXToolKit</PublisherName>
     <SuiteName>TSXToolKIt</SuiteName>
-    <ApplicationRevision>17</ApplicationRevision>
+    <ApplicationRevision>19</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
