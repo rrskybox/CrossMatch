@@ -39,7 +39,8 @@ namespace GaiaReferral
 
         public XDocument DBxml;
 
-        const double StandardMagnitudeRange = 2;
+        const double StandardMagnitudeRange = 2; 
+        const double DisableMagnitudeRange = 20;
 
         public FormCatalogPlot()
         {
@@ -167,7 +168,7 @@ namespace GaiaReferral
                         {
                             DialogResult mdMag = MessageBox.Show("Do you want to ignore magnitudes?", "Manual Option for " + tgtInput.TargetList[i].TargetName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             if (mdMag == DialogResult.Yes)
-                                magDiff = 8;
+                                magDiff = DisableMagnitudeRange ;
                             DialogResult mdClick = MessageBox.Show("Click on new target then hit OK", "Manual Option for " + tgtInput.TargetList[i].TargetName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             //Find current clickfind location
                             if (mdClick == DialogResult.OK)
@@ -175,6 +176,7 @@ namespace GaiaReferral
                                 (double ra, double dec) = StarFinder.LookupClickFind();
                                 tgtInput.TargetList[i].TargetRA = ra;
                                 tgtInput.TargetList[i].TargetDec = dec;
+                                tgtInput.TargetList[i] = FindReference(tgtInput.TargetList[i], magDiff);
                             }
                         }
                         else
