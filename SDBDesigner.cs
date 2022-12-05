@@ -1,16 +1,16 @@
 ﻿/*
-* SDBDesigner class holds the conversion of web data to SDB data
+* Methods for creating and saving reference data in SDB text input format
 * 
 * Author:           Rick McAlister
-* Date:             4/23/21
+* Date:             12/5/2022
 * Current Version:  1.0
 * Developed in:     Visual Studio 2019
 * Coded in:         C# 8.0
-* App Envioronment: Windows 10 Pro, .Net 4.8, TSX 5.0 Build 12978
+* App Envioronment: Windows 10 Pro, .Net 4.8, TSX 5.0 Build 13479
 * 
 * Change Log:
 * 
-* 4/23/21 Rev 1.0  Release
+* 12/5/2022 Rev 1.0  Release
 * 
 */
 

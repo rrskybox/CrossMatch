@@ -86,7 +86,6 @@
       <DependentUpon>FormCatalogPlot.cs</DependentUpon>
     </Compile>
     <Compile Include="SDBDesigner.cs" />
-    <Compile Include="ReadReferral.cs" />
     <Compile Include="StarFinder.cs" />
     <Compile Include="ListRunner.cs" />
     <Compile Include="Program.cs" />

@@ -1,12 +1,26 @@
-﻿using System;
+﻿/*
+* Methods for reading in csv file
+* 
+* Author:           Rick McAlister
+* Date:             12/5/2022
+* Current Version:  1.0
+* Developed in:     Visual Studio 2019
+* Coded in:         C# 8.0
+* App Envioronment: Windows 10 Pro, .Net 4.8, TSX 5.0 Build 13479
+* 
+* Change Log:
+* 
+* 12/5/2022 Rev 1.0  Release
+* 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Globalization;
-using System.Text.RegularExpressions;
-
 
 namespace GaiaReferral
 {
