@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9F74D96B-B0F5-49E3-9282-DC10A3B0887B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PlotReference</RootNamespace>
-    <AssemblyName>PlotReference</AssemblyName>
+    <RootNamespace>CrossMatch</RootNamespace>
+    <AssemblyName>CrossMatch</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -24,10 +24,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>Catalog Plotter</ProductName>
+    <ProductName>Cross Match</ProductName>
     <PublisherName>TSXToolKit</PublisherName>
     <SuiteName>TSXToolKIt</SuiteName>
-    <ApplicationRevision>20</ApplicationRevision>
+    <ApplicationRevision>21</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -79,11 +79,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormCatalogPlot.cs">
+    <Compile Include="FormCrossMatch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCatalogPlot.Designer.cs">
-      <DependentUpon>FormCatalogPlot.cs</DependentUpon>
+    <Compile Include="FormCrossMatch.Designer.cs">
+      <DependentUpon>FormCrossMatch.cs</DependentUpon>
     </Compile>
     <Compile Include="SDBDesigner.cs" />
     <Compile Include="StarFinder.cs" />
@@ -91,8 +91,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
-    <EmbeddedResource Include="FormCatalogPlot.resx">
-      <DependentUpon>FormCatalogPlot.cs</DependentUpon>
+    <EmbeddedResource Include="FormCrossMatch.resx">
+      <DependentUpon>FormCrossMatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -102,6 +102,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="PlotReference_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">

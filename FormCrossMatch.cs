@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using TheSky64Lib;
 
 
-namespace GaiaReferral
+namespace CrossMatch
 {
     public partial class FormCatalogPlot : Form
     {
@@ -60,7 +60,7 @@ namespace GaiaReferral
                 //probably in debug mode
                 this.Text = " in Debug";
             }
-            this.Text = "Star Tours V" + this.Text;
+            this.Text = "Cross Match V" + this.Text;
         }
 
         private List<StarFinder.ReferenceData> FindTargetReferences()

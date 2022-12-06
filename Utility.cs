@@ -21,7 +21,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GaiaReferral
+namespace CrossMatch
 {
     public static class Utility
     {

@@ -21,7 +21,7 @@ using System.Xml.Linq;
 using System.Windows.Forms;
 using System.IO;
 
-namespace GaiaReferral
+namespace CrossMatch
 {
     public class SDBDesigner
     {

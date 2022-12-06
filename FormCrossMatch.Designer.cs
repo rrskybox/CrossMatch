@@ -1,5 +1,5 @@
 ﻿
-namespace GaiaReferral
+namespace CrossMatch
 {
     partial class FormCatalogPlot
     {

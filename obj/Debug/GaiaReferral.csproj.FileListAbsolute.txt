@@ -1,0 +1,32 @@
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe.config
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe.manifest
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.application
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.pdb
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.AssemblyReference.cache
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\Interop.TheSky64Lib.dll
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.ResolveComReference.cache
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.FormCatalogPlot.resources
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.Properties.Resources.resources
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.GenerateResource.cache
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.CoreCompileInputs.cache
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.exe.manifest
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.application
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.exe
+C:\Users\rick-\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.pdb
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe.config
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe.manifest
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.application
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.exe
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\bin\Debug\PlotReference.pdb
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.AssemblyReference.cache
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\Interop.TheSky64Lib.dll
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.ResolveComReference.cache
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.FormCatalogPlot.resources
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.Properties.Resources.resources
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.GenerateResource.cache
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\GaiaReferral.csproj.CoreCompileInputs.cache
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.exe.manifest
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.application
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.exe
+C:\Users\Rick McAlister\OneDrive\CS Projects\PlotReference\obj\Debug\PlotReference.pdb

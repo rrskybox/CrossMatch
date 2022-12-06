@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace GaiaReferral
+namespace CrossMatch
 {
     public class ListRunner
     {
