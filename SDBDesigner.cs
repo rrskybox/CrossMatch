@@ -84,10 +84,10 @@ namespace CrossMatch
         const string ColEndX = "colEnd";
         const string FieldIDX = "fieldID";
 
-         #endregion
+        #endregion
 
-        const int DefaultObjectIndex = 0;
-        const string DefaultObjectDescription = "Star";
+        const int DefaultObjectIndex = 55;
+        const string DefaultObjectDescription = "Reference Point";
 
         public List<DataColumn> HeaderMap = new List<DataColumn>();
 
@@ -117,19 +117,40 @@ namespace CrossMatch
             set { ControlFields.Single(c => c.ControlName == SearchPrefixX).ControlValue = value; }
         }
 
-        public void MakeHeaderMap(List<ListRunner.TargetData> tgData)
+        public void MakeHeaderMap(List<TargetData> tgData, bool IsIAU)
         {
             //create a map of datafields to textcolumns
             //for the tns xml data file to be convert to a sdb.text file
             HeaderMap = new List<DataColumn>();
             //Create Headers for columns
-            const string col0 = "IAUName";
-            const string col1 = "Reference";
-            const string col2 = "ReferenceRA";
-            const string col3 = "ReferenceDec";
-            const string col4 = "ReferenceMag";
-            const string col5 = "MaxFOV";
-            const string col6 = "MinFOV";
+            string col0;
+            string col1;
+            string col2;
+            string col3;
+            string col4;
+            string col5;
+            string col6;
+            if (IsIAU)
+            {
+                col0 = "IAUName";
+                col1 = "Reference";
+                col2 = "ReferenceRA";
+                col3 = "ReferenceDec";
+                col4 = "ReferenceMag";
+                col5 = "MaxFOV";
+                col6 = "MinFOV";
+            }
+            else
+            {
+                col0 = "Name";
+                col1 = "NA";
+                col2 = "RA";
+                col3 = "Dec";
+                col4 = "Mag";
+                col5 = "MaxFOV";
+                col6 = "MinFOV";
+            }
+
 
             HeaderMap.Add(new DataColumn()
             {
@@ -235,6 +256,27 @@ namespace CrossMatch
                         dataFields.Add(sb);
                         fieldStart += sb.ColumnWidth;
                         break;
+                    case "Name":
+                        sb.TSXEntryName = LabelOrSearchX; //1
+                        sb.IsBuiltIn = true;
+                        sb.IsPassed = true;
+                        dataFields.Add(sb);
+                        fieldStart += sb.ColumnWidth;
+                        break;
+                    case "RA":  //4
+                        sb.TSXEntryName = RAHoursX;
+                        sb.IsBuiltIn = true;
+                        sb.IsPassed = true;
+                        dataFields.Add(sb);
+                        fieldStart += sb.ColumnWidth;
+                        break;
+                    case "Dec": //5
+                        sb.TSXEntryName = DecDegreesX;
+                        sb.IsBuiltIn = true;
+                        sb.IsPassed = true;
+                        dataFields.Add(sb);
+                        fieldStart += sb.ColumnWidth;
+                        break;
                     default:
                         sb.IsPassed = false;
                         break;
@@ -267,31 +309,31 @@ namespace CrossMatch
             return dataFields;
         }
 
-        public void SDBToClipboard(List<ListRunner.TargetData> tgtDataList)
+        public void SDBToClipboard(List<TargetData> tgtDataList, bool IsIAU)
         {
             //Add the header
             //Build and add text lines according to the header
             //Write the XDocument to the text file
-            MakeHeaderMap(tgtDataList);
+            MakeHeaderMap(tgtDataList, IsIAU);
             List<DataColumn> dataFields = ResultstoSDBHeader();
             string sdbSection = SDBHeaderGenerator(dataFields).ToString();
             //Write the sdb text according to the column map
-            foreach (ListRunner.TargetData tgtData in tgtDataList)
-                sdbSection += "\n" + SDBtoTextLine(tgtData, dataFields);
+            foreach (TargetData tgtData in tgtDataList)
+                sdbSection += "\n" + SDBtoTextLine(tgtData, dataFields, IsIAU);
             Clipboard.SetText(sdbSection);
             return;
         }
 
-        public void SDBToCSVFile(List<ListRunner.TargetData> tgtDataList, string fileName)
+        public void SDBToCSVFile(List<TargetData> tgtDataList, string fileName, bool IsIAU)
         {
             //Do all the same things as clipboard, but write it to a file *sdb.csv
-            
-            MakeHeaderMap(tgtDataList);
+
+            MakeHeaderMap(tgtDataList, IsIAU);
             List<DataColumn> dataFields = ResultstoSDBHeader();
             string sdbSection = SDBHeaderGenerator(dataFields).ToString();
             //Write the sdb text according to the column map
-            foreach (ListRunner.TargetData tgtData in tgtDataList)
-                sdbSection += "\n" + SDBtoTextLine(tgtData, dataFields);
+            foreach (TargetData tgtData in tgtDataList)
+                sdbSection += "\n" + SDBtoTextLine(tgtData, dataFields, IsIAU);
             //open file for writing
             string filePath = fileName.Replace(".csv", ".sdb.txt");
             if (File.Exists(filePath))
@@ -300,16 +342,22 @@ namespace CrossMatch
             return;
         }
 
-        private string SDBtoTextLine(ListRunner.TargetData tgtData, List<DataColumn> dataFields)
+        private string SDBtoTextLine(TargetData tgtData, List<DataColumn> dataFields, bool IsIAU)
         {
-            return
-                tgtData.TargetName.PadRight(dataFields[0].ColumnWidth) +
-                tgtData.CrossRefName.PadRight(dataFields[1].ColumnWidth) +
-                tgtData.ReferenceStar.RA.ToString().PadRight(dataFields[2].ColumnWidth) +
-                tgtData.ReferenceStar.Dec.ToString().PadRight(dataFields[3].ColumnWidth) +
-                tgtData.ReferenceStar.Magnitude.ToString().PadRight(dataFields[4].ColumnWidth) +
-                tgtData.ReferenceStar.MinFOV.ToString("0.00").PadRight(dataFields[5].ColumnWidth) +
-                tgtData.ReferenceStar.MaxFOV.ToString("0.00").PadRight(dataFields[6].ColumnWidth);
+            if (IsIAU)
+                return
+                    tgtData.TargetName.PadRight(dataFields[0].ColumnWidth) +
+                    tgtData.CrossRefName.PadRight(dataFields[1].ColumnWidth) +
+                    tgtData.ReferenceStar.RA.ToString().PadRight(dataFields[2].ColumnWidth) +
+                    tgtData.ReferenceStar.Dec.ToString().PadRight(dataFields[3].ColumnWidth) +
+                    tgtData.ReferenceStar.Magnitude.ToString().PadRight(dataFields[4].ColumnWidth) +
+                    tgtData.ReferenceStar.MinFOV.ToString("0.00").PadRight(dataFields[5].ColumnWidth) +
+                    tgtData.ReferenceStar.MaxFOV.ToString("0.00").PadRight(dataFields[6].ColumnWidth);
+            else
+                return
+                    tgtData.TargetName.PadRight(dataFields[0].ColumnWidth) +
+                    tgtData.TargetRA.ToString().PadRight(dataFields[2].ColumnWidth) +
+                    tgtData.TargetDec.ToString().PadRight(dataFields[3].ColumnWidth);
         }
 
         public XDocument SDBHeaderGenerator(List<DataColumn> dataFields)
@@ -354,7 +402,6 @@ namespace CrossMatch
                          new XAttribute(ColBegX, uc.ColumnStart.ToString()),
                        new XAttribute(ColEndX, Utility.ColumnEnd(uc.ColumnStart, uc.ColumnWidth)));
         }
-
 
         public class DataColumn
         {

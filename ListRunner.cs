@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace CrossMatch
 {
@@ -50,7 +51,7 @@ namespace CrossMatch
         const int StartMag = 66;
         const int LengthMag = 5;
 
-        public List<TargetData> TargetList = new List<TargetData>();
+        public List<TargetData> CsvTargetList = new List<TargetData>();
 
         public ListRunner(string csvPath)
         {
@@ -58,8 +59,14 @@ namespace CrossMatch
             // Create a UTF-8 encoding.
             Encoding decode = Encoding.GetEncoding(65001);
             //get filename and open textfile for reading
-            string[] starLines = File.ReadAllLines(csvPath, decode);
-            TargetList = BuildTargetList(starLines);
+            string[] starLines = null;
+            try { starLines = File.ReadAllLines(csvPath, decode); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            CsvTargetList = BuildTargetList(starLines);
             return;
         }
 
@@ -151,18 +158,6 @@ namespace CrossMatch
             target.TargetRA = target.TargetRA * 24 / 360;  //Convert RA to hours
             target.HasReference = false;
             return target;
-        }
-
-        public class TargetData
-        {
-            public string TargetName { get; set; }
-            public double TargetRA { get; set; }
-            public double TargetDec { get; set; }
-            public double? TargetMag { get; set; }
-            public bool HasReference { get; set; }
-            public string CrossRefName { get; set; } = "None";
-            public StarFinder.ReferenceData ReferenceStar = new StarFinder.ReferenceData();
-
         }
 
     }

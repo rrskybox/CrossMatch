@@ -39,10 +39,12 @@ namespace CrossMatch
             this.NextButton = new System.Windows.Forms.Button();
             this.StepCheckBox = new System.Windows.Forms.CheckBox();
             this.RefTextBox = new System.Windows.Forms.TextBox();
-            this.SkipCheckBox = new System.Windows.Forms.CheckBox();
+            this.SkipMagCheckBox = new System.Windows.Forms.CheckBox();
             this.OnTopCheckBox = new System.Windows.Forms.CheckBox();
             this.AbortButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
+            this.IAUCheckBox = new System.Windows.Forms.CheckBox();
+            this.SdbxCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,9 +85,9 @@ namespace CrossMatch
             // 
             // StarListTreeView
             // 
-            this.StarListTreeView.Location = new System.Drawing.Point(11, 75);
+            this.StarListTreeView.Location = new System.Drawing.Point(11, 92);
             this.StarListTreeView.Name = "StarListTreeView";
-            this.StarListTreeView.Size = new System.Drawing.Size(224, 331);
+            this.StarListTreeView.Size = new System.Drawing.Size(224, 314);
             this.StarListTreeView.TabIndex = 3;
             // 
             // ListButton
@@ -128,22 +130,22 @@ namespace CrossMatch
             this.RefTextBox.TabIndex = 7;
             this.RefTextBox.Text = "Gaia";
             // 
-            // SkipCheckBox
+            // SkipMagCheckBox
             // 
-            this.SkipCheckBox.AutoSize = true;
-            this.SkipCheckBox.ForeColor = System.Drawing.Color.White;
-            this.SkipCheckBox.Location = new System.Drawing.Point(115, 38);
-            this.SkipCheckBox.Name = "SkipCheckBox";
-            this.SkipCheckBox.Size = new System.Drawing.Size(47, 17);
-            this.SkipCheckBox.TabIndex = 8;
-            this.SkipCheckBox.Text = "Skip";
-            this.SkipCheckBox.UseVisualStyleBackColor = true;
+            this.SkipMagCheckBox.AutoSize = true;
+            this.SkipMagCheckBox.ForeColor = System.Drawing.Color.White;
+            this.SkipMagCheckBox.Location = new System.Drawing.Point(115, 69);
+            this.SkipMagCheckBox.Name = "SkipMagCheckBox";
+            this.SkipMagCheckBox.Size = new System.Drawing.Size(114, 17);
+            this.SkipMagCheckBox.TabIndex = 8;
+            this.SkipMagCheckBox.Text = "Ignore Magnitudes";
+            this.SkipMagCheckBox.UseVisualStyleBackColor = true;
             // 
             // OnTopCheckBox
             // 
             this.OnTopCheckBox.AutoSize = true;
             this.OnTopCheckBox.ForeColor = System.Drawing.Color.White;
-            this.OnTopCheckBox.Location = new System.Drawing.Point(12, 51);
+            this.OnTopCheckBox.Location = new System.Drawing.Point(30, 60);
             this.OnTopCheckBox.Name = "OnTopCheckBox";
             this.OnTopCheckBox.Size = new System.Drawing.Size(62, 17);
             this.OnTopCheckBox.TabIndex = 9;
@@ -171,16 +173,42 @@ namespace CrossMatch
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
+            // IAUCheckBox
+            // 
+            this.IAUCheckBox.AutoSize = true;
+            this.IAUCheckBox.ForeColor = System.Drawing.Color.White;
+            this.IAUCheckBox.Location = new System.Drawing.Point(115, 35);
+            this.IAUCheckBox.Name = "IAUCheckBox";
+            this.IAUCheckBox.Size = new System.Drawing.Size(44, 17);
+            this.IAUCheckBox.TabIndex = 12;
+            this.IAUCheckBox.Text = "IAU";
+            this.IAUCheckBox.UseVisualStyleBackColor = true;
+            this.IAUCheckBox.CheckedChanged += new System.EventHandler(this.IAUCheckBox_CheckedChanged);
+            // 
+            // SdbxCheckBox
+            // 
+            this.SdbxCheckBox.AutoSize = true;
+            this.SdbxCheckBox.ForeColor = System.Drawing.Color.White;
+            this.SdbxCheckBox.Location = new System.Drawing.Point(115, 51);
+            this.SdbxCheckBox.Name = "SdbxCheckBox";
+            this.SdbxCheckBox.Size = new System.Drawing.Size(55, 17);
+            this.SdbxCheckBox.TabIndex = 13;
+            this.SdbxCheckBox.Text = "SDBX";
+            this.SdbxCheckBox.UseVisualStyleBackColor = true;
+            this.SdbxCheckBox.CheckedChanged += new System.EventHandler(this.SdbxCheckBox_CheckedChanged);
+            // 
             // FormCatalogPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(680, 455);
+            this.Controls.Add(this.SdbxCheckBox);
+            this.Controls.Add(this.IAUCheckBox);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.AbortButton);
             this.Controls.Add(this.OnTopCheckBox);
-            this.Controls.Add(this.SkipCheckBox);
+            this.Controls.Add(this.SkipMagCheckBox);
             this.Controls.Add(this.RefTextBox);
             this.Controls.Add(this.StepCheckBox);
             this.Controls.Add(this.NextButton);
@@ -207,10 +235,12 @@ namespace CrossMatch
         private System.Windows.Forms.Button NextButton;
         private System.Windows.Forms.CheckBox StepCheckBox;
         private System.Windows.Forms.TextBox RefTextBox;
-        private System.Windows.Forms.CheckBox SkipCheckBox;
+        private System.Windows.Forms.CheckBox SkipMagCheckBox;
         private System.Windows.Forms.CheckBox OnTopCheckBox;
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button CloseButton;
+        private System.Windows.Forms.CheckBox IAUCheckBox;
+        private System.Windows.Forms.CheckBox SdbxCheckBox;
     }
 }
 
