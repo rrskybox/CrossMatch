@@ -53,7 +53,7 @@ namespace CrossMatch
 
         public List<TargetData> CsvTargetList = new List<TargetData>();
 
-        public ListRunner(string csvPath)
+        public ListRunner(string csvPath, bool raIsDegrees)
         {
             //Read target data into a target list from a csv file
             // Create a UTF-8 encoding.
@@ -66,7 +66,7 @@ namespace CrossMatch
                 MessageBox.Show(ex.Message);
                 return;
             }
-            CsvTargetList = BuildTargetList(starLines);
+            CsvTargetList = BuildTargetList(starLines, raIsDegrees);
             return;
         }
 
@@ -83,7 +83,7 @@ namespace CrossMatch
             }
         }
 
-        private List<TargetData> BuildTargetList(string[] starLines)
+        private List<TargetData> BuildTargetList(string[] starLines, bool raIsDegrees)
         {
             //Note index 0 is header row
             List<TargetData> lr = new List<TargetData>();
@@ -94,12 +94,13 @@ namespace CrossMatch
                     TargetData target = new TargetData();
                     string[] csvEntries = starLines[i].Split(csvSplit, StringSplitOptions.None);
                     target.TargetName = ToASCII(csvEntries[NameSplit].ToString());
-                    target.TargetRA = Convert.ToDouble(csvEntries[RASplit]);
-                    target.TargetDec = Convert.ToDouble(csvEntries[DecSplit]);
+                    target.TargetRA = Utility.ParseRADecString(csvEntries[RASplit], ' ');
+                    target.TargetDec = Utility.ParseRADecString(csvEntries[DecSplit], ' ');
                     try { target.TargetMag = Convert.ToDouble(csvEntries[MagSplit]); }
                     catch { target.TargetMag = null; }
                     //Convert RA decimal degrees to hours
-                    target.TargetRA = target.TargetRA * 24 / 360;
+                    if (raIsDegrees)
+                        target.TargetRA = target.TargetRA * 24 / 360;
                     target.HasReference = false;
                     lr.Add(target);
                 }
@@ -143,7 +144,7 @@ namespace CrossMatch
             return cleanStr;
         }
 
-         private TargetData BuildTarget(string starLine)
+        private TargetData BuildTarget(string starLine)
         {
             char splitChar = ',';
 

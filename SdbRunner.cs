@@ -16,6 +16,7 @@ namespace CrossMatch
         const string hTag = "</TheSkyDatabaseHeader>";
 
         public List<TargetData> SdbTargetList = new List<TargetData>();
+
         public XElement xSDBHeader;
         private string[] starLines;
         private int crossRefColMax;

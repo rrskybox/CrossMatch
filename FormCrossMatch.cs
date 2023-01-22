@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Deployment.Application;
 using System.Drawing;
 using System.IO;
@@ -27,11 +28,17 @@ using TheSky64Lib;
 
 namespace CrossMatch
 {
+    public enum HeaderType
+    {
+        Generic = 0,
+        IAU = 1,
+        SDBX = 2
+    }
+
     public partial class FormCatalogPlot : Form
     {
         public bool IsWaitingOnStep = false;
         public string[] lines;
-        public int refCount;
         public double magDiff;
         public string listPath;
 
@@ -45,13 +52,13 @@ namespace CrossMatch
         public FormCatalogPlot()
         {
             InitializeComponent();
-            sky6StarChart tsxsc = new sky6StarChart();
-            StarChart.Series[0]["BubbleScaleMin"] = "-20";
             ButtonGreen(MapButton);
             ButtonGreen(ListButton);
             ButtonDisable(NextButton);
             ButtonDisable(AbortButton);
             ButtonGreen(CloseButton);
+            StarChart.Series[0]["BubbleScaleMin"] = "-20";
+
 
             try
             { this.Text = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(); }
@@ -61,6 +68,9 @@ namespace CrossMatch
                 this.Text = " in Debug";
             }
             this.Text = "Cross Match V" + this.Text;
+            try { sky6StarChart tsxsc = new sky6StarChart(); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
 
         private List<StarFinder.ReferenceData> FindTargetReferences()
@@ -146,17 +156,29 @@ namespace CrossMatch
         }
         #endregion
 
-        private void ListReferencesCSV()
+        private void ListReferencesCSV(HeaderType hdrType)
         {
             List<TargetData> tgtDataList = new List<TargetData>();
+
+            bool isIAU = false;
+            bool raIsDegrees = false;
+            if (hdrType == HeaderType.Generic)
+            {
+                isIAU = false;
+                raIsDegrees = false;
+            }
+            if (hdrType == HeaderType.IAU)
+            {
+                isIAU = true;
+                raIsDegrees = true;
+            }
 
             DialogResult dr = StarListFileDialog.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 //Get csv filename and translate contents into an XML database
                 string listPath = StarListFileDialog.FileName;
-                ListRunner tgtInput = new ListRunner(listPath);
-                refCount = 0;
+                ListRunner tgtInput = new ListRunner(listPath, raIsDegrees);
                 for (int i = 0; i < tgtInput.CsvTargetList.Count; i++)
                 {
                     magDiff = StandardMagnitudeRange;
@@ -199,22 +221,21 @@ namespace CrossMatch
                     System.Windows.Forms.Application.DoEvents();
                     if (abortFlag)
                         return;
-                    if (tgtInput.CsvTargetList[i].HasReference)
-                        refCount++;
                 }
                 //write out new file -- Rev 15 restricted to csv file input and and sdb text output
                 if (Path.GetExtension(listPath).Contains("csv"))
                 {
                     SDBDesigner sdb = new SDBDesigner();
-                    sdb.SDBToClipboard(tgtInput.CsvTargetList, IAUCheckBox.Checked);
-                    sdb.SDBToCSVFile(tgtInput.CsvTargetList, listPath, IAUCheckBox.Checked);
+                    sdb.SDBToClipboard(tgtInput.CsvTargetList, isIAU);
+                    sdb.SDBToCSVFile(tgtInput.CsvTargetList, listPath, isIAU);
                 }
+                int refCount = (tgtInput.CsvTargetList.Where ( x=>x.HasReference)).Count();
                 MessageBox.Show("Collected " + refCount + "/" + tgtInput.CsvTargetList.Count.ToString() + " " + RefTextBox.Text + " reference stars", "List Completion", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
         }
 
-        private void ListReferencesSDB()
+        private void ListReferencesSDB(HeaderType hdrType)
         {
             List<TargetData> tgtDataList = new List<TargetData>();
 
@@ -224,7 +245,6 @@ namespace CrossMatch
                 //Get csv filename and translate contents into an XML database
                 string listPath = StarListFileDialog.FileName;
                 SdbRunner tgtInput = new SdbRunner(listPath);
-                refCount = 0;
                 for (int i = 0; i < tgtInput.SdbTargetList.Count; i++)
                 {
                     magDiff = StandardMagnitudeRange;
@@ -270,9 +290,9 @@ namespace CrossMatch
                 }
                 //write out new file
                 tgtInput.AppendTargetData(listPath);
+                int refCount = (tgtInput.SdbTargetList.Where(x => x.HasReference)).Count();
                 MessageBox.Show("Collected " + refCount + "/" + tgtInput.SdbTargetList.Count.ToString() + " " + RefTextBox.Text + " reference stars", "List Completion", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
-
         }
 
         private TargetData FindReference(TargetData tgtData, double magDiff)
@@ -293,7 +313,6 @@ namespace CrossMatch
                     tgtData.CrossRefName = ((StarFinder.ReferenceData)sdg).ReferenceName + " " + ((StarFinder.ReferenceData)sdg).CatalogId;
                     tgtData.ReferenceStar = (StarFinder.ReferenceData)sdg;
                     tgtData.HasReference = true;
-                    refCount++;
                     return tgtData;
                 }
                 else
@@ -328,11 +347,24 @@ namespace CrossMatch
             ButtonGreen(AbortButton);
 
             abortFlag = false;
+            HeaderType hType;
 
-            if (IAUCheckBox.Checked)
-                ListReferencesCSV();
-            else
-                ListReferencesSDB();
+            Enum.TryParse(HeaderChoiceBox.Text, out hType);
+
+            switch (hType)
+            {
+                case HeaderType.Generic:
+                    ListReferencesCSV(hType);
+                    break;
+                case HeaderType.SDBX:
+                    ListReferencesSDB(hType);
+                    break;
+                case HeaderType.IAU:
+                    ListReferencesCSV(hType);
+                    break;
+                default:
+                    return;
+            }
 
             ButtonGreen(ListButton);
             ButtonEnable(MapButton);
@@ -387,17 +419,6 @@ namespace CrossMatch
             return;
         }
 
-        private void SdbxCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (SdbxCheckBox.Checked)
-                IAUCheckBox.Checked = false;
-        }
-
-        private void IAUCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (IAUCheckBox.Checked)
-                SdbxCheckBox.Checked = false;
-        }
     }
 
 }

@@ -43,8 +43,7 @@ namespace CrossMatch
             this.OnTopCheckBox = new System.Windows.Forms.CheckBox();
             this.AbortButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
-            this.IAUCheckBox = new System.Windows.Forms.CheckBox();
-            this.SdbxCheckBox = new System.Windows.Forms.CheckBox();
+            this.HeaderChoiceBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,9 +84,9 @@ namespace CrossMatch
             // 
             // StarListTreeView
             // 
-            this.StarListTreeView.Location = new System.Drawing.Point(11, 92);
+            this.StarListTreeView.Location = new System.Drawing.Point(11, 88);
             this.StarListTreeView.Name = "StarListTreeView";
-            this.StarListTreeView.Size = new System.Drawing.Size(224, 314);
+            this.StarListTreeView.Size = new System.Drawing.Size(224, 318);
             this.StarListTreeView.TabIndex = 3;
             // 
             // ListButton
@@ -115,7 +114,7 @@ namespace CrossMatch
             // 
             this.StepCheckBox.AutoSize = true;
             this.StepCheckBox.ForeColor = System.Drawing.Color.White;
-            this.StepCheckBox.Location = new System.Drawing.Point(192, 52);
+            this.StepCheckBox.Location = new System.Drawing.Point(192, 65);
             this.StepCheckBox.Name = "StepCheckBox";
             this.StepCheckBox.Size = new System.Drawing.Size(48, 17);
             this.StepCheckBox.TabIndex = 6;
@@ -134,7 +133,7 @@ namespace CrossMatch
             // 
             this.SkipMagCheckBox.AutoSize = true;
             this.SkipMagCheckBox.ForeColor = System.Drawing.Color.White;
-            this.SkipMagCheckBox.Location = new System.Drawing.Point(115, 69);
+            this.SkipMagCheckBox.Location = new System.Drawing.Point(12, 65);
             this.SkipMagCheckBox.Name = "SkipMagCheckBox";
             this.SkipMagCheckBox.Size = new System.Drawing.Size(114, 17);
             this.SkipMagCheckBox.TabIndex = 8;
@@ -144,8 +143,9 @@ namespace CrossMatch
             // OnTopCheckBox
             // 
             this.OnTopCheckBox.AutoSize = true;
+            this.OnTopCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.OnTopCheckBox.ForeColor = System.Drawing.Color.White;
-            this.OnTopCheckBox.Location = new System.Drawing.Point(30, 60);
+            this.OnTopCheckBox.Location = new System.Drawing.Point(88, 422);
             this.OnTopCheckBox.Name = "OnTopCheckBox";
             this.OnTopCheckBox.Size = new System.Drawing.Size(62, 17);
             this.OnTopCheckBox.TabIndex = 9;
@@ -173,29 +173,17 @@ namespace CrossMatch
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // IAUCheckBox
+            // HeaderChoiceBox
             // 
-            this.IAUCheckBox.AutoSize = true;
-            this.IAUCheckBox.ForeColor = System.Drawing.Color.White;
-            this.IAUCheckBox.Location = new System.Drawing.Point(115, 35);
-            this.IAUCheckBox.Name = "IAUCheckBox";
-            this.IAUCheckBox.Size = new System.Drawing.Size(44, 17);
-            this.IAUCheckBox.TabIndex = 12;
-            this.IAUCheckBox.Text = "IAU";
-            this.IAUCheckBox.UseVisualStyleBackColor = true;
-            this.IAUCheckBox.CheckedChanged += new System.EventHandler(this.IAUCheckBox_CheckedChanged);
-            // 
-            // SdbxCheckBox
-            // 
-            this.SdbxCheckBox.AutoSize = true;
-            this.SdbxCheckBox.ForeColor = System.Drawing.Color.White;
-            this.SdbxCheckBox.Location = new System.Drawing.Point(115, 51);
-            this.SdbxCheckBox.Name = "SdbxCheckBox";
-            this.SdbxCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.SdbxCheckBox.TabIndex = 13;
-            this.SdbxCheckBox.Text = "SDBX";
-            this.SdbxCheckBox.UseVisualStyleBackColor = true;
-            this.SdbxCheckBox.CheckedChanged += new System.EventHandler(this.SdbxCheckBox_CheckedChanged);
+            this.HeaderChoiceBox.FormattingEnabled = true;
+            this.HeaderChoiceBox.Items.AddRange(new object[] {
+            "Generic",
+            "SDBX",
+            "IAU"});
+            this.HeaderChoiceBox.Location = new System.Drawing.Point(115, 38);
+            this.HeaderChoiceBox.Name = "HeaderChoiceBox";
+            this.HeaderChoiceBox.Size = new System.Drawing.Size(71, 21);
+            this.HeaderChoiceBox.TabIndex = 14;
             // 
             // FormCatalogPlot
             // 
@@ -203,8 +191,7 @@ namespace CrossMatch
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(680, 455);
-            this.Controls.Add(this.SdbxCheckBox);
-            this.Controls.Add(this.IAUCheckBox);
+            this.Controls.Add(this.HeaderChoiceBox);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.AbortButton);
             this.Controls.Add(this.OnTopCheckBox);
@@ -219,7 +206,6 @@ namespace CrossMatch
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "FormCatalogPlot";
             this.Text = "Catalog Plot";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -239,8 +225,7 @@ namespace CrossMatch
         private System.Windows.Forms.CheckBox OnTopCheckBox;
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button CloseButton;
-        private System.Windows.Forms.CheckBox IAUCheckBox;
-        private System.Windows.Forms.CheckBox SdbxCheckBox;
+        private System.Windows.Forms.ComboBox HeaderChoiceBox;
     }
 }
 
