@@ -75,6 +75,9 @@ namespace CrossMatch
 
         private List<StarFinder.ReferenceData> FindTargetReferences()
         {
+            //Clear current references and charts
+            StarChart.Series[0].Points.Clear();
+            StarListTreeView.Nodes.Clear();
             //Find current clickfind location
             (double ra, double dec) = StarFinder.LookupClickFind();
             //Read in each star object and save name, ra and dec, magnitude and id's
@@ -181,6 +184,16 @@ namespace CrossMatch
                 ListRunner tgtInput = new ListRunner(listPath, raIsDegrees);
                 for (int i = 0; i < tgtInput.CsvTargetList.Count; i++)
                 {
+                    //Update star location if required
+                    if (UpdateCheckbox.Checked)
+                    {
+                        (double newRA, double newDec) = StarFinder.LookupStarRADec(tgtInput.CsvTargetList[i].TargetName);
+                        if (newRA != 0 && newDec != 0)
+                        {
+                            tgtInput.CsvTargetList[i].TargetRA = newRA;
+                            tgtInput.CsvTargetList[i].TargetDec = newDec;
+                        }
+                    }
                     magDiff = StandardMagnitudeRange;
                     tgtInput.CsvTargetList[i] = FindReference(tgtInput.CsvTargetList[i], magDiff);
                     while (!tgtInput.CsvTargetList[i].HasReference && (tgtInput.CsvTargetList[i].TargetMag >= 3) && !SkipMagCheckBox.Checked)
@@ -419,6 +432,6 @@ namespace CrossMatch
             return;
         }
 
-    }
+      }
 
 }

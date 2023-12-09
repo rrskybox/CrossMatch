@@ -56,11 +56,34 @@ namespace CrossMatch
             return (ra, dec);
         }
 
+        public static (double, double) LookupStarRADec(string starName)
+        {
+            //Look up the J2000 coordinates of starName from TSX Catalogs
+            //Set TSX objects -- starchart and object information
+            double ra = 0;
+            double dec = 0;
+            sky6StarChart tsxsc = new sky6StarChart();
+            sky6ObjectInformation tsxoi = new sky6ObjectInformation();
+            //Look up star(s) at the celestial location
+            try { tsxsc.Find(starName); }
+            catch (Exception ex) { ra = 0; dec = 0; }
+            if (tsxoi.Count > 0)
+            {
+                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_RA_2000);
+                ra = tsxoi.ObjInfoPropOut;
+                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DEC_2000);
+                dec = tsxoi.ObjInfoPropOut;
+            }
+            return (ra, dec);
+        }
+
         public static List<ReferenceData> FindNearbyStars(double ra, double dec)
         {
             //Set TSX objects -- starchart and object information
             sky6StarChart tsxsc = new sky6StarChart();
             sky6ObjectInformation tsxoi = new sky6ObjectInformation();
+            //zoom the star chart in to maximize search precision on star chart coordinates
+            tsxsc.FieldOfView = 0.1;
             //Look up star(s) at the celestial location
             tsxsc.EquatorialToStarChartXY(ra, dec);
             double scX = tsxsc.dOut0;

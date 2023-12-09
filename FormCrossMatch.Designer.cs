@@ -44,6 +44,10 @@ namespace CrossMatch
             this.AbortButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.HeaderChoiceBox = new System.Windows.Forms.ComboBox();
+            this.UpdateCheckbox = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,7 +69,7 @@ namespace CrossMatch
             chartArea1.AxisY.Title = "Dec (arc sec)";
             chartArea1.Name = "ChartArea1";
             this.StarChart.ChartAreas.Add(chartArea1);
-            this.StarChart.Location = new System.Drawing.Point(249, 12);
+            this.StarChart.Location = new System.Drawing.Point(306, 12);
             this.StarChart.Name = "StarChart";
             series1.BackSecondaryColor = System.Drawing.Color.White;
             series1.ChartArea = "ChartArea1";
@@ -84,9 +88,9 @@ namespace CrossMatch
             // 
             // StarListTreeView
             // 
-            this.StarListTreeView.Location = new System.Drawing.Point(11, 88);
+            this.StarListTreeView.Location = new System.Drawing.Point(14, 107);
             this.StarListTreeView.Name = "StarListTreeView";
-            this.StarListTreeView.Size = new System.Drawing.Size(224, 318);
+            this.StarListTreeView.Size = new System.Drawing.Size(274, 299);
             this.StarListTreeView.TabIndex = 3;
             // 
             // ListButton
@@ -102,7 +106,7 @@ namespace CrossMatch
             // NextButton
             // 
             this.NextButton.BackColor = System.Drawing.Color.Gray;
-            this.NextButton.Location = new System.Drawing.Point(192, 10);
+            this.NextButton.Location = new System.Drawing.Point(245, 59);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(43, 36);
             this.NextButton.TabIndex = 5;
@@ -114,7 +118,7 @@ namespace CrossMatch
             // 
             this.StepCheckBox.AutoSize = true;
             this.StepCheckBox.ForeColor = System.Drawing.Color.White;
-            this.StepCheckBox.Location = new System.Drawing.Point(192, 65);
+            this.StepCheckBox.Location = new System.Drawing.Point(119, 20);
             this.StepCheckBox.Name = "StepCheckBox";
             this.StepCheckBox.Size = new System.Drawing.Size(48, 17);
             this.StepCheckBox.TabIndex = 6;
@@ -123,7 +127,7 @@ namespace CrossMatch
             // 
             // RefTextBox
             // 
-            this.RefTextBox.Location = new System.Drawing.Point(115, 12);
+            this.RefTextBox.Location = new System.Drawing.Point(13, 68);
             this.RefTextBox.Name = "RefTextBox";
             this.RefTextBox.Size = new System.Drawing.Size(71, 20);
             this.RefTextBox.TabIndex = 7;
@@ -133,7 +137,7 @@ namespace CrossMatch
             // 
             this.SkipMagCheckBox.AutoSize = true;
             this.SkipMagCheckBox.ForeColor = System.Drawing.Color.White;
-            this.SkipMagCheckBox.Location = new System.Drawing.Point(12, 65);
+            this.SkipMagCheckBox.Location = new System.Drawing.Point(184, 9);
             this.SkipMagCheckBox.Name = "SkipMagCheckBox";
             this.SkipMagCheckBox.Size = new System.Drawing.Size(114, 17);
             this.SkipMagCheckBox.TabIndex = 8;
@@ -145,7 +149,7 @@ namespace CrossMatch
             this.OnTopCheckBox.AutoSize = true;
             this.OnTopCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.OnTopCheckBox.ForeColor = System.Drawing.Color.White;
-            this.OnTopCheckBox.Location = new System.Drawing.Point(88, 422);
+            this.OnTopCheckBox.Location = new System.Drawing.Point(119, 426);
             this.OnTopCheckBox.Name = "OnTopCheckBox";
             this.OnTopCheckBox.Size = new System.Drawing.Size(62, 17);
             this.OnTopCheckBox.TabIndex = 9;
@@ -165,7 +169,7 @@ namespace CrossMatch
             // 
             // CloseButton
             // 
-            this.CloseButton.Location = new System.Drawing.Point(192, 412);
+            this.CloseButton.Location = new System.Drawing.Point(245, 417);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(43, 34);
             this.CloseButton.TabIndex = 11;
@@ -180,17 +184,65 @@ namespace CrossMatch
             "Generic",
             "SDBX",
             "IAU"});
-            this.HeaderChoiceBox.Location = new System.Drawing.Point(115, 38);
+            this.HeaderChoiceBox.Location = new System.Drawing.Point(107, 68);
             this.HeaderChoiceBox.Name = "HeaderChoiceBox";
             this.HeaderChoiceBox.Size = new System.Drawing.Size(71, 21);
             this.HeaderChoiceBox.TabIndex = 14;
+            // 
+            // UpdateCheckbox
+            // 
+            this.UpdateCheckbox.AutoSize = true;
+            this.UpdateCheckbox.ForeColor = System.Drawing.Color.White;
+            this.UpdateCheckbox.Location = new System.Drawing.Point(184, 27);
+            this.UpdateCheckbox.Name = "UpdateCheckbox";
+            this.UpdateCheckbox.Size = new System.Drawing.Size(104, 17);
+            this.UpdateCheckbox.TabIndex = 15;
+            this.UpdateCheckbox.Text = "Update RA/Dec";
+            this.UpdateCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(10, 91);
+            this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(112, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Reference Star Listing";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(105, 51);
+            this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "SDB Header";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(11, 50);
+            this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(76, 13);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Reference To:";
             // 
             // FormCatalogPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
-            this.ClientSize = new System.Drawing.Size(680, 455);
+            this.ClientSize = new System.Drawing.Size(735, 463);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.UpdateCheckbox);
             this.Controls.Add(this.HeaderChoiceBox);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.AbortButton);
@@ -226,6 +278,10 @@ namespace CrossMatch
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.ComboBox HeaderChoiceBox;
+        private System.Windows.Forms.CheckBox UpdateCheckbox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 
