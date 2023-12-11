@@ -48,6 +48,7 @@ namespace CrossMatch
 
         const double StandardMagnitudeRange = 2;
         const double DisableMagnitudeRange = 20;
+        const double MinimumReferenceMagnitude = 2;
 
         public FormCatalogPlot()
         {
@@ -58,7 +59,6 @@ namespace CrossMatch
             ButtonDisable(AbortButton);
             ButtonGreen(CloseButton);
             StarChart.Series[0]["BubbleScaleMin"] = "-20";
-
 
             try
             { this.Text = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(); }
@@ -71,6 +71,8 @@ namespace CrossMatch
             try { sky6StarChart tsxsc = new sky6StarChart(); }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
+            HeaderChoiceBox.SelectedIndex = (int)HeaderType.SDBX;
+
         }
 
         private List<StarFinder.ReferenceData> FindTargetReferences()
@@ -79,7 +81,7 @@ namespace CrossMatch
             StarChart.Series[0].Points.Clear();
             StarListTreeView.Nodes.Clear();
             //Find current clickfind location
-            (double ra, double dec) = StarFinder.LookupClickFind();
+            (double ra, double dec) = StarFinder.GetCurserPosition();
             //Read in each star object and save name, ra and dec, magnitude and id's
             List<StarFinder.ReferenceData> sdList = StarFinder.FindNearbyStars(ra, dec);
             if (sdList.Count > 0)
@@ -196,7 +198,7 @@ namespace CrossMatch
                     }
                     magDiff = StandardMagnitudeRange;
                     tgtInput.CsvTargetList[i] = FindReference(tgtInput.CsvTargetList[i], magDiff);
-                    while (!tgtInput.CsvTargetList[i].HasReference && (tgtInput.CsvTargetList[i].TargetMag >= 3) && !SkipMagCheckBox.Checked)
+                    while (!SkipBox.Checked && !tgtInput.CsvTargetList[i].HasReference && (tgtInput.CsvTargetList[i].TargetMag >= 3) && !SkipMagCheckBox.Checked)
                     {
                         DialogResult mdHand = MessageBox.Show("Reference failure.  Do you want to hand select?", "Manual Option for " + tgtInput.CsvTargetList[i].TargetName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         if (mdHand == DialogResult.Yes)
@@ -208,7 +210,7 @@ namespace CrossMatch
                             //Find current clickfind location
                             if (mdClick == DialogResult.OK)
                             {
-                                (double ra, double dec) = StarFinder.LookupClickFind();
+                                (double ra, double dec) = StarFinder.GetCurserPosition();
                                 tgtInput.CsvTargetList[i].TargetRA = ra;
                                 tgtInput.CsvTargetList[i].TargetDec = dec;
                                 tgtInput.CsvTargetList[i] = FindReference(tgtInput.CsvTargetList[i], magDiff);
@@ -242,7 +244,7 @@ namespace CrossMatch
                     sdb.SDBToClipboard(tgtInput.CsvTargetList, isIAU);
                     sdb.SDBToCSVFile(tgtInput.CsvTargetList, listPath, isIAU);
                 }
-                int refCount = (tgtInput.CsvTargetList.Where ( x=>x.HasReference)).Count();
+                int refCount = (tgtInput.CsvTargetList.Where(x => x.HasReference)).Count();
                 MessageBox.Show("Collected " + refCount + "/" + tgtInput.CsvTargetList.Count.ToString() + " " + RefTextBox.Text + " reference stars", "List Completion", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
@@ -262,7 +264,7 @@ namespace CrossMatch
                 {
                     magDiff = StandardMagnitudeRange;
                     tgtInput.SdbTargetList[i] = FindReference(tgtInput.SdbTargetList[i], magDiff);
-                    while (!tgtInput.SdbTargetList[i].HasReference && (tgtInput.SdbTargetList[i].TargetMag >= 3) && !SkipMagCheckBox.Checked)
+                    while (! SkipBox.Checked && !tgtInput.SdbTargetList[i].HasReference && (tgtInput.SdbTargetList[i].TargetMag >= MinimumReferenceMagnitude) && !SkipMagCheckBox.Checked)
                     {
                         DialogResult mdHand = MessageBox.Show("Reference failure.  Do you want to hand select?", "Manual Option for " + tgtInput.SdbTargetList[i].TargetName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         if (mdHand == DialogResult.Yes)
@@ -274,7 +276,7 @@ namespace CrossMatch
                             //Find current clickfind location
                             if (mdClick == DialogResult.OK)
                             {
-                                (double ra, double dec) = StarFinder.LookupClickFind();
+                                (double ra, double dec) = StarFinder.GetCurserPosition();
                                 tgtInput.SdbTargetList[i].TargetRA = ra;
                                 tgtInput.SdbTargetList[i].TargetDec = dec;
                                 tgtInput.SdbTargetList[i] = FindReference(tgtInput.SdbTargetList[i], magDiff);
@@ -432,6 +434,7 @@ namespace CrossMatch
             return;
         }
 
-      }
+
+    }
 
 }

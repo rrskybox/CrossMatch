@@ -34,18 +34,26 @@ namespace CrossMatch
                 MessageBox.Show("Read SBD Text File Failed: "+ex.Message);
                 return;
             }
-            starLines = (sdbTextIn.Substring(hdrEndIdx + 1, sdbTextIn.Length - hdrEndIdx - 1)).Replace('\r', ' ').Split('\n'); ;
-            SdbTargetList = BuildTargetList();
+            //starLines = (sdbTextIn.Substring(hdrEndIdx +1, sdbTextIn.Length - hdrEndIdx - 1)).Replace('\r', ' ').Split('\n'); ;
+            //starLines = (sdbTextIn.Substring(hdrEndIdx, sdbTextIn.Length - hdrEndIdx)).Replace('\r', ' ').Split('\n'); ;
+            List<string> sdbRows = new List<string>();
+            StringReader sdbText = new StringReader(sdbTextIn.Substring(hdrEndIdx, sdbTextIn.Length - hdrEndIdx));
+            while (sdbText.Peek()>0)
+            {
+                sdbRows.Add(sdbText.ReadLine());
+            }
+            SdbTargetList = BuildTargetList(sdbRows);
+            starLines = sdbRows.ToArray();
             return;
         }
 
-        private List<TargetData> BuildTargetList()
+        private List<TargetData> BuildTargetList(List<string> sdbRows)
         {
             //Note index 0 is header row
             List<TargetData> lr = new List<TargetData>();
-            for (int i = 1; i < starLines.Length; i++)
+            foreach (string s in sdbRows)
             {
-                TargetData target = GetTargetData(i);
+                TargetData target = GetTargetData(s);
                 target.HasReference = false;
                 lr.Add(target);
             }
@@ -66,7 +74,7 @@ namespace CrossMatch
 
         }
 
-        public string ReadFixedCell(int sdbRow, string sdbColName)
+        public string ReadFixedCell(string sdbRow, string sdbColName)
         {
             //Returns value in row sdbRow at column sdbColName, for Name, RA or Dec fixed sdb text column names
             //Read header to get column start and len from sdbColName
@@ -78,21 +86,21 @@ namespace CrossMatch
             {
                 int colBeg = Convert.ToInt32(xCol.Attribute(xBegin).Value);
                 int colEnd = Convert.ToInt32(xCol.Attribute(xEnd).Value);
-                try { cellValue = starLines[sdbRow].Substring(colBeg - 1, colEnd - colBeg + 1); }
+                try { cellValue = sdbRow.Substring(colBeg - 1, colEnd - colBeg + 1); }
                 catch { return cellValue; }
             }
             return cellValue;
         }
 
-        public TargetData GetTargetData(int starLine)
+        public TargetData GetTargetData(string row)
         {
             //Converts a line in the starLine to a targetdata object
             TargetData lineData = new TargetData();
-            lineData.TargetName = ReadFixedCell(starLine, "labelOrSearch");
-            lineData.TargetRA = Convert.ToDouble(ReadFixedCell(starLine, "raHours"));
-            lineData.TargetDec = Convert.ToDouble(ReadFixedCell(starLine, "decDegrees"));
-            if (ReadFixedCell(starLine, "magnitude") != null)
-                lineData.TargetMag = Convert.ToDouble(ReadFixedCell(starLine, "magnitude"));
+            lineData.TargetName = ReadFixedCell(row, "labelOrSearch");
+            lineData.TargetRA = Convert.ToDouble(ReadFixedCell(row, "raHours"));
+            lineData.TargetDec = Convert.ToDouble(ReadFixedCell(row, "decDegrees"));
+            if (ReadFixedCell(row, "magnitude") != null)
+                lineData.TargetMag = Convert.ToDouble(ReadFixedCell(row, "magnitude"));
             else
                 lineData.TargetMag = 0;
             return lineData;
@@ -102,7 +110,7 @@ namespace CrossMatch
         {
             //Appends cross match data as last column to input sdb text lines
             int crColBeg = FindMaxLineLength();
-            for (int i = 0; i < starLines.Length - 1; i++)
+            for (int i = 0; i < starLines.Length; i++)
                 starLines[i] += "  " + SdbTargetList[i].CrossRefName;
             int crColEnd = FindMaxLineLength();
             for (int i = 0; i < starLines.Length - 1; i++)
@@ -127,7 +135,6 @@ namespace CrossMatch
             File.AppendAllLines(newPath, starLines);
             return;
         }
-
 
 
         private int FindMaxLineLength()

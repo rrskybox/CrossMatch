@@ -51,7 +51,8 @@ namespace CrossMatch
             for (int i = 0; i < radec.Length; i++) 
                 if (radec[i] == '\"') radec = radec.Remove(i, 1);
             string[] radecSplit = radec.Split(separator);
-            if (radecSplit.Length == 1) return Convert.ToDouble(radec);
+            if (radecSplit.Length == 1) 
+                return Convert.ToDouble(radec);
             else
             {
                 int radecsign = 1;

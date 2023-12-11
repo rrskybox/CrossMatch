@@ -48,6 +48,7 @@ namespace CrossMatch
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.SkipBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,7 +107,7 @@ namespace CrossMatch
             // NextButton
             // 
             this.NextButton.BackColor = System.Drawing.Color.Gray;
-            this.NextButton.Location = new System.Drawing.Point(245, 59);
+            this.NextButton.Location = new System.Drawing.Point(245, 60);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(43, 36);
             this.NextButton.TabIndex = 5;
@@ -118,7 +119,7 @@ namespace CrossMatch
             // 
             this.StepCheckBox.AutoSize = true;
             this.StepCheckBox.ForeColor = System.Drawing.Color.White;
-            this.StepCheckBox.Location = new System.Drawing.Point(119, 20);
+            this.StepCheckBox.Location = new System.Drawing.Point(124, 10);
             this.StepCheckBox.Name = "StepCheckBox";
             this.StepCheckBox.Size = new System.Drawing.Size(48, 17);
             this.StepCheckBox.TabIndex = 6;
@@ -137,7 +138,7 @@ namespace CrossMatch
             // 
             this.SkipMagCheckBox.AutoSize = true;
             this.SkipMagCheckBox.ForeColor = System.Drawing.Color.White;
-            this.SkipMagCheckBox.Location = new System.Drawing.Point(184, 9);
+            this.SkipMagCheckBox.Location = new System.Drawing.Point(184, 10);
             this.SkipMagCheckBox.Name = "SkipMagCheckBox";
             this.SkipMagCheckBox.Size = new System.Drawing.Size(114, 17);
             this.SkipMagCheckBox.TabIndex = 8;
@@ -149,7 +150,7 @@ namespace CrossMatch
             this.OnTopCheckBox.AutoSize = true;
             this.OnTopCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.OnTopCheckBox.ForeColor = System.Drawing.Color.White;
-            this.OnTopCheckBox.Location = new System.Drawing.Point(119, 426);
+            this.OnTopCheckBox.Location = new System.Drawing.Point(60, 422);
             this.OnTopCheckBox.Name = "OnTopCheckBox";
             this.OnTopCheckBox.Size = new System.Drawing.Size(62, 17);
             this.OnTopCheckBox.TabIndex = 9;
@@ -182,8 +183,8 @@ namespace CrossMatch
             this.HeaderChoiceBox.FormattingEnabled = true;
             this.HeaderChoiceBox.Items.AddRange(new object[] {
             "Generic",
-            "SDBX",
-            "IAU"});
+            "IAU",
+            "SDBX"});
             this.HeaderChoiceBox.Location = new System.Drawing.Point(107, 68);
             this.HeaderChoiceBox.Name = "HeaderChoiceBox";
             this.HeaderChoiceBox.Size = new System.Drawing.Size(71, 21);
@@ -193,7 +194,7 @@ namespace CrossMatch
             // 
             this.UpdateCheckbox.AutoSize = true;
             this.UpdateCheckbox.ForeColor = System.Drawing.Color.White;
-            this.UpdateCheckbox.Location = new System.Drawing.Point(184, 27);
+            this.UpdateCheckbox.Location = new System.Drawing.Point(184, 28);
             this.UpdateCheckbox.Name = "UpdateCheckbox";
             this.UpdateCheckbox.Size = new System.Drawing.Size(104, 17);
             this.UpdateCheckbox.TabIndex = 15;
@@ -215,7 +216,7 @@ namespace CrossMatch
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(105, 51);
+            this.label2.Location = new System.Drawing.Point(105, 52);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 13);
@@ -233,12 +234,24 @@ namespace CrossMatch
             this.label3.TabIndex = 18;
             this.label3.Text = "Reference To:";
             // 
+            // SkipBox
+            // 
+            this.SkipBox.AutoSize = true;
+            this.SkipBox.ForeColor = System.Drawing.Color.White;
+            this.SkipBox.Location = new System.Drawing.Point(124, 28);
+            this.SkipBox.Name = "SkipBox";
+            this.SkipBox.Size = new System.Drawing.Size(47, 17);
+            this.SkipBox.TabIndex = 19;
+            this.SkipBox.Text = "Skip";
+            this.SkipBox.UseVisualStyleBackColor = true;
+            // 
             // FormCatalogPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(735, 463);
+            this.Controls.Add(this.SkipBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -282,6 +295,7 @@ namespace CrossMatch
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox SkipBox;
     }
 }
 

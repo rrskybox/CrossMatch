@@ -23,11 +23,12 @@ namespace CrossMatch
 {
     public class StarFinder
     {
+        const double imageWidthInArcSec = 30 * 60; //FOV for chart set to 30 arcmin
+
         public static void SetStarChart(double ra, double dec)
         {
-            const double imageWidthInArcSec = 30 * 60;
 
-            //Sets Starchart to center on target with 30 arcmin width
+            //Sets Starchart to center on target with 30 arcmin (1800 arcsec) width
             sky6StarChart tsxsc = new sky6StarChart();
             //Turn on star display -- otherwise clickfind doesn't work
             tsxsc.SetDisplayProperty(Sk6DisplayPropertyObjectType.OT6_STAR,
@@ -38,11 +39,11 @@ namespace CrossMatch
 
             tsxsc.RightAscension = ra;
             tsxsc.Declination = dec;
-            tsxsc.FieldOfView = (imageWidthInArcSec * 1.5) / 3600; //in degrees
+            tsxsc.FieldOfView = (imageWidthInArcSec) / 3600; //in degrees
             return;
         }
 
-        public static (double, double) LookupClickFind()
+        public static (double, double) GetCurserPosition()
         {
             //Set TSX objects -- starchart and object information
             sky6StarChart tsxsc = new sky6StarChart();
@@ -79,39 +80,53 @@ namespace CrossMatch
 
         public static List<ReferenceData> FindNearbyStars(double ra, double dec)
         {
+            List<ReferenceData> sdList = new List<ReferenceData>();
+
+            bool searchDone = false;
             //Set TSX objects -- starchart and object information
             sky6StarChart tsxsc = new sky6StarChart();
             sky6ObjectInformation tsxoi = new sky6ObjectInformation();
-            //zoom the star chart in to maximize search precision on star chart coordinates
-            tsxsc.FieldOfView = 0.1;
-            //Look up star(s) at the celestial location
-            tsxsc.EquatorialToStarChartXY(ra, dec);
-            double scX = tsxsc.dOut0;
-            double scY = tsxsc.dOut1;
-            tsxsc.ClickFind((int)scX, (int)scY);
-            //Read in each star object and save name, ra and dec, magnitude and id's
-            List<ReferenceData> sdList = new List<ReferenceData>();
-            for (int rIdx = 0; rIdx < tsxoi.Count; rIdx++)
+            //Center chart on curser and establish base FOV
+            SetStarChart(ra, dec);
+
+            while (!searchDone)
             {
-                ReferenceData sd = new ReferenceData();
-                tsxoi.Index = rIdx;
-                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_NAME1);
-                sd.ReferenceName = tsxoi.ObjInfoPropOut;
-                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_RA_2000);
-                sd.RA = tsxoi.ObjInfoPropOut;
-                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DEC_2000);
-                sd.Dec = tsxoi.ObjInfoPropOut;
-                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_MAG);
-                sd.Magnitude = tsxoi.ObjInfoPropOut;
-                tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_CATALOGID);
-                sd.CatalogId = tsxoi.ObjInfoPropOut;
-                if (sd.CatalogId.Contains("APASS"))
+                //Look up star(s) at the celestial location
+                tsxsc.EquatorialToStarChartXY(ra, dec);
+                double scX = tsxsc.dOut0;
+                double scY = tsxsc.dOut1;
+                tsxsc.ClickFind((int)scX, (int)scY);
+                //Read in each star object and save name, ra and dec, magnitude and id's
+                sdList = new List<ReferenceData>();
+                for (int rIdx = 0; rIdx < tsxoi.Count; rIdx++)
                 {
-                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DB_FIELD_7);
-                    sd.CatalogId = tsxoi.ObjInfoPropOut.ToString();
+                    ReferenceData sd = new ReferenceData();
+                    tsxoi.Index = rIdx;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_NAME1);
+                    sd.ReferenceName = tsxoi.ObjInfoPropOut;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_RA_2000);
+                    sd.RA = tsxoi.ObjInfoPropOut;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DEC_2000);
+                    sd.Dec = tsxoi.ObjInfoPropOut;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_MAG);
+                    sd.Magnitude = tsxoi.ObjInfoPropOut;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_CATALOGID);
+                    sd.CatalogId = tsxoi.ObjInfoPropOut;
+                    if (sd.ReferenceName.Contains("Gaia") && tsxoi.Count > 2)
+                        searchDone = true;
+                    if (sd.CatalogId.Contains("APASS"))
+                    {
+                        tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DB_FIELD_7);
+                        sd.CatalogId = tsxoi.ObjInfoPropOut.ToString();
+                    }
+                    if (!sd.ReferenceName.Contains("Mouse"))
+                        sdList.Add(sd);
                 }
-                if (!sd.ReferenceName.Contains("Mouse"))
-                    sdList.Add(sd);
+                //If the search has found a Gaia star, if it is separated from the target by more than the maximum separation
+                if (!searchDone && tsxsc.FieldOfView < 10) 
+                    tsxsc.FieldOfView *= 2;  //Scale up search if we are not complete here
+                else
+                    searchDone = true;
             }
             return sdList;
         }
