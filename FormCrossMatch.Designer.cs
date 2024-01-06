@@ -49,6 +49,7 @@ namespace CrossMatch
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.SkipBox = new System.Windows.Forms.CheckBox();
+            this.ValidateCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.StarChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +61,7 @@ namespace CrossMatch
             this.MapButton.TabIndex = 1;
             this.MapButton.Text = "Map";
             this.MapButton.UseVisualStyleBackColor = true;
-            this.MapButton.Click += new System.EventHandler(this.FindButton_Click);
+            this.MapButton.Click += new System.EventHandler(this.MapButton_Click);
             // 
             // StarChart
             // 
@@ -185,7 +186,7 @@ namespace CrossMatch
             "Generic",
             "IAU",
             "SDBX"});
-            this.HeaderChoiceBox.Location = new System.Drawing.Point(107, 68);
+            this.HeaderChoiceBox.Location = new System.Drawing.Point(97, 68);
             this.HeaderChoiceBox.Name = "HeaderChoiceBox";
             this.HeaderChoiceBox.Size = new System.Drawing.Size(71, 21);
             this.HeaderChoiceBox.TabIndex = 14;
@@ -216,7 +217,7 @@ namespace CrossMatch
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(105, 52);
+            this.label2.Location = new System.Drawing.Point(95, 52);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 13);
@@ -245,12 +246,24 @@ namespace CrossMatch
             this.SkipBox.Text = "Skip";
             this.SkipBox.UseVisualStyleBackColor = true;
             // 
+            // ValidateCheckBox
+            // 
+            this.ValidateCheckBox.AutoSize = true;
+            this.ValidateCheckBox.ForeColor = System.Drawing.Color.White;
+            this.ValidateCheckBox.Location = new System.Drawing.Point(180, 72);
+            this.ValidateCheckBox.Name = "ValidateCheckBox";
+            this.ValidateCheckBox.Size = new System.Drawing.Size(64, 17);
+            this.ValidateCheckBox.TabIndex = 20;
+            this.ValidateCheckBox.Text = "Validate";
+            this.ValidateCheckBox.UseVisualStyleBackColor = true;
+            // 
             // FormCatalogPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(735, 463);
+            this.Controls.Add(this.ValidateCheckBox);
             this.Controls.Add(this.SkipBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -296,6 +309,7 @@ namespace CrossMatch
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox SkipBox;
+        private System.Windows.Forms.CheckBox ValidateCheckBox;
     }
 }
 

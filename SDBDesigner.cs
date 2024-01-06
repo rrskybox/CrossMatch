@@ -130,6 +130,8 @@ namespace CrossMatch
             string col4;
             string col5;
             string col6;
+            string col7;
+
             if (IsIAU)
             {
                 col0 = "IAUName";
@@ -139,6 +141,7 @@ namespace CrossMatch
                 col4 = "ReferenceMag";
                 col5 = "MaxFOV";
                 col6 = "MinFOV";
+                col7 = "SIMBAD";
             }
             else
             {
@@ -149,6 +152,7 @@ namespace CrossMatch
                 col4 = "Mag";
                 col5 = "MaxFOV";
                 col6 = "MinFOV";
+                col7 = "SIMBAD";
             }
 
 
@@ -192,6 +196,12 @@ namespace CrossMatch
             {
                 SourceDataName = col6,
                 ColumnWidth = tgData.Max(x => x.ReferenceStar.MaxFOV.ToString("0.00").Length)
+            });
+
+            HeaderMap.Add(new DataColumn()
+            {
+                SourceDataName = col7,
+                ColumnWidth = tgData.Max(x => x.SIMBAD.Length)
             });
 
 
@@ -277,6 +287,13 @@ namespace CrossMatch
                         dataFields.Add(sb);
                         fieldStart += sb.ColumnWidth;
                         break;
+                    case "SIMBAD":
+                        sb.TSXEntryName = DecDegreesX;
+                        sb.IsBuiltIn = true;
+                        sb.IsPassed = true;
+                        dataFields.Add(sb);
+                        fieldStart += sb.ColumnWidth;
+                        break;
                     default:
                         sb.IsPassed = false;
                         break;
@@ -352,7 +369,8 @@ namespace CrossMatch
                     tgtData.ReferenceStar.Dec.ToString().PadRight(dataFields[3].ColumnWidth) +
                     tgtData.ReferenceStar.Magnitude.ToString().PadRight(dataFields[4].ColumnWidth) +
                     tgtData.ReferenceStar.MinFOV.ToString("0.00").PadRight(dataFields[5].ColumnWidth) +
-                    tgtData.ReferenceStar.MaxFOV.ToString("0.00").PadRight(dataFields[6].ColumnWidth);
+                    tgtData.ReferenceStar.MaxFOV.ToString("0.00").PadRight(dataFields[6].ColumnWidth) +
+                    tgtData.SIMBAD.PadRight(dataFields[7].ColumnWidth);
             else
                 return
                     tgtData.TargetName.PadRight(dataFields[0].ColumnWidth) +

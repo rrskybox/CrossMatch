@@ -24,6 +24,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Windows.Forms;
 using TheSky64Lib;
+using System.Diagnostics.Eventing.Reader;
 
 
 namespace CrossMatch
@@ -89,8 +90,34 @@ namespace CrossMatch
                 List<StarFinder.ReferenceData> sdNorm = NormalizeLocation(sdList);
                 PlotStars(sdNorm);
                 CreateStarReferenceTree(sdNorm);
+                if (ValidateCheckBox.Checked)
+                {
+                    string gCatName = "Gaia DR3";
+                    string name = sdNorm.FirstOrDefault().ReferenceName;
+                    string simbadGaiaDR3Data = FindSIMBADReferences(name);
+                    if (simbadGaiaDR3Data != null && simbadGaiaDR3Data.Length > 9)
+                    {
+                        string simbadCode = simbadGaiaDR3Data.Remove(0, 9);
+                        string tsxCode = sdNorm.FirstOrDefault(x => x.ReferenceName == gCatName).CatalogId;
+                        if (tsxCode == simbadCode)
+                            AddMainNode("Gaia validated on SIMBAD: ");
+                        else
+                            AddMainNode("Gaia conflicts with SIMBAD: " + simbadGaiaDR3Data);
+                    }
+                }
+                return sdList;
             }
-            return sdList;
+            return null;
+        }
+
+        private string FindSIMBADReferences(string objectName)
+        {
+            //Find current clickfind location
+            //string name = StarFinder.GetCurrentObjectName();
+            //Read in each star object and save name, ra and dec, magnitude and id's
+            //List<StarFinder.ReferenceData> sdList = StarFinder.FindNearbyStars(ra, dec);
+            string simbadResult = SIMBAD.SimbadQueryResults(objectName);
+            return simbadResult;
         }
 
         #region star graph plotting
@@ -264,7 +291,7 @@ namespace CrossMatch
                 {
                     magDiff = StandardMagnitudeRange;
                     tgtInput.SdbTargetList[i] = FindReference(tgtInput.SdbTargetList[i], magDiff);
-                    while (! SkipBox.Checked && !tgtInput.SdbTargetList[i].HasReference && (tgtInput.SdbTargetList[i].TargetMag >= MinimumReferenceMagnitude) && !SkipMagCheckBox.Checked)
+                    while (!SkipBox.Checked && !tgtInput.SdbTargetList[i].HasReference && (tgtInput.SdbTargetList[i].TargetMag >= MinimumReferenceMagnitude) && !SkipMagCheckBox.Checked)
                     {
                         DialogResult mdHand = MessageBox.Show("Reference failure.  Do you want to hand select?", "Manual Option for " + tgtInput.SdbTargetList[i].TargetName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         if (mdHand == DialogResult.Yes)
@@ -322,13 +349,41 @@ namespace CrossMatch
                 CreateStarReferenceTree(sdNorm);
                 Show();
 
+                //SIMBAD VALIDATION
+                if (ValidateCheckBox.Checked)
+                {
+                    string gCatName = "Gaia DR3";
+                    string name = sdNorm.FirstOrDefault().ReferenceName;
+                    string simbadGaiaDR3Data = FindSIMBADReferences(tgtData.TargetName);
+                    if (simbadGaiaDR3Data != null && simbadGaiaDR3Data.Length > 9)
+                    {
+                        string simbadCode = simbadGaiaDR3Data.Remove(0, 9);
+                        string tsxCode = sdNorm.FirstOrDefault(x => x.ReferenceName == gCatName).CatalogId;
+                        if (tsxCode == simbadCode)
+                        {
+                            tgtData.SIMBAD = "Validated";
+                            AddMainNode("Gaia validated on SIMBAD: ");
+                        }
+                        else
+                        {
+                            tgtData.SIMBAD = "Mismatch";
+                            AddMainNode("Gaia conflicts with SIMBAD: " + simbadGaiaDR3Data);
+                        }
+                    }
+                    else
+                    {
+                        tgtData.SIMBAD = "No Record";
+                        AddMainNode("No SIMBAD record found for " + tgtData.TargetName);
+                    }
+                }
+                //END SIMBAD VALIDATION
+
                 StarFinder.ReferenceData? sdg = StarFinder.FindNearestByCatalog(sdNorm, RefTextBox.Text, tgtData.TargetMag, magDiff);
                 if (sdg != null)
                 {
                     tgtData.CrossRefName = ((StarFinder.ReferenceData)sdg).ReferenceName + " " + ((StarFinder.ReferenceData)sdg).CatalogId;
                     tgtData.ReferenceStar = (StarFinder.ReferenceData)sdg;
                     tgtData.HasReference = true;
-                    return tgtData;
                 }
                 else
                 {
@@ -340,7 +395,7 @@ namespace CrossMatch
         }
 
         #region click events
-        private void FindButton_Click(object sender, EventArgs e)
+        private void MapButton_Click(object sender, EventArgs e)
         {
             ButtonRed(MapButton);
             ButtonDisable(ListButton);

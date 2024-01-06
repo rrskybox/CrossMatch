@@ -25,23 +25,27 @@ namespace CrossMatch
     {
         const double imageWidthInArcSec = 30 * 60; //FOV for chart set to 30 arcmin
 
-        public static void SetStarChart(double ra, double dec)
+        public static string GetCurrentObjectName()
         {
-
-            //Sets Starchart to center on target with 30 arcmin (1800 arcsec) width
+            //Set TSX objects -- starchart and object information
             sky6StarChart tsxsc = new sky6StarChart();
-            //Turn on star display -- otherwise clickfind doesn't work
-            tsxsc.SetDisplayProperty(Sk6DisplayPropertyObjectType.OT6_STAR,
-                                     Sk6DisplayPropertySkyMode.sk6DisplayPropertySkyModeChartMode,
-                                     Sk6DisplayProperty.sk6DisplayPropertyVisible,
-                                     Sk6DisplayPropertyItem.sk6DisplayPropertyItemVisibleValue,
-                                     1);
-
-            tsxsc.RightAscension = ra;
-            tsxsc.Declination = dec;
-            tsxsc.FieldOfView = (imageWidthInArcSec) / 3600; //in degrees
-            return;
+            sky6ObjectInformation tsxoi = new sky6ObjectInformation();
+            
+            //Get "FInd" celestial location for mouse click
+            tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_NAME1);
+            string name = tsxoi.ObjInfoPropOut;
+            return (name);
         }
+
+        public static void SetCurrentObject(string objectName)
+        {
+            //Set TSX objects -- starchart and object information
+            sky6StarChart tsxsc = new sky6StarChart();
+            tsxsc.Find(objectName);
+            sky6ObjectInformation tsxoi = new sky6ObjectInformation();
+        }
+
+
 
         public static (double, double) GetCurserPosition()
         {
@@ -78,6 +82,24 @@ namespace CrossMatch
             return (ra, dec);
         }
 
+        public static void SetStarChart(double ra, double dec)
+        {
+
+            //Sets Starchart to center on target with 30 arcmin (1800 arcsec) width
+            sky6StarChart tsxsc = new sky6StarChart();
+            //Turn on star display -- otherwise clickfind doesn't work
+            tsxsc.SetDisplayProperty(Sk6DisplayPropertyObjectType.OT6_STAR,
+                                     Sk6DisplayPropertySkyMode.sk6DisplayPropertySkyModeChartMode,
+                                     Sk6DisplayProperty.sk6DisplayPropertyVisible,
+                                     Sk6DisplayPropertyItem.sk6DisplayPropertyItemVisibleValue,
+                                     1);
+
+            tsxsc.RightAscension = ra;
+            tsxsc.Declination = dec;
+            tsxsc.FieldOfView = (imageWidthInArcSec) / 3600; //in degrees
+            return;
+        }
+
         public static List<ReferenceData> FindNearbyStars(double ra, double dec)
         {
             List<ReferenceData> sdList = new List<ReferenceData>();
@@ -108,6 +130,8 @@ namespace CrossMatch
                     sd.RA = tsxoi.ObjInfoPropOut;
                     tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DEC_2000);
                     sd.Dec = tsxoi.ObjInfoPropOut;
+                    tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_DIST_PARSEC);
+                    sd.DistanceParsec = tsxoi.ObjInfoPropOut;
                     tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_MAG);
                     sd.Magnitude = tsxoi.ObjInfoPropOut;
                     tsxoi.Property(Sk6ObjectInformationProperty.sk6ObjInfoProp_CATALOGID);
@@ -123,7 +147,7 @@ namespace CrossMatch
                         sdList.Add(sd);
                 }
                 //If the search has found a Gaia star, if it is separated from the target by more than the maximum separation
-                if (!searchDone && tsxsc.FieldOfView < 10) 
+                if (!searchDone && tsxsc.FieldOfView < 10)
                     tsxsc.FieldOfView *= 2;  //Scale up search if we are not complete here
                 else
                     searchDone = true;
@@ -131,7 +155,7 @@ namespace CrossMatch
             return sdList;
         }
 
-        public static ReferenceData? FindNearestByCatalog(List<ReferenceData> sdList, string catalog, double? magnitude, double magDiff)
+        public static ReferenceData FindNearestByCatalog(List<ReferenceData> sdList, string catalog, double? magnitude, double magDiff)
         {
             //Get all stars from Gaia catalog whose magnitude is near the desired magnitude
             List<StarFinder.ReferenceData> closeMagList = sdList.FindAll(x => x.ReferenceName.Contains(catalog) && IsMagnitudeClose(x.Magnitude, magnitude, magDiff));
@@ -177,6 +201,7 @@ namespace CrossMatch
             public string CatalogId;
             public double RA = 0;
             public double Dec = 0;
+            public double DistanceParsec = 0;
             public double? Magnitude = 0;
             public string FieldId;
             public double NormalRA;  //in arcsec
